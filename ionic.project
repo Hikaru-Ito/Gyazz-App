@@ -1,0 +1,10 @@
+{
+  "name": "gyazz-app",
+  "app_id": "",
+  "proxies": [
+    {
+      "path": "/%E5%A2%97%E4%BA%95%E7%A0%94",
+      "proxyUrl": "http://gyazz.masuilab.org/%E5%A2%97%E4%BA%95%E7%A0%94"
+    }
+  ]
+}

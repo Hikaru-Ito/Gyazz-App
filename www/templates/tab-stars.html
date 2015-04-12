@@ -1,0 +1,13 @@
+<ion-view view-title="MyStars">
+  <ion-content class="padding">
+    <ion-list can-swipe="true">
+      <ion-item class="item-remove-animate item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/stars/pages/{{page.id}}">
+        <h2>{{page.title}}</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+        <ion-option-button class="button-energized" ng-click="share(item)">
+            <i class="icon ion-ios-star"></i>
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
