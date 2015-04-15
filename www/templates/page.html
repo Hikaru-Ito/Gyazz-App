@@ -1,8 +1,7 @@
 <ion-view view-title="{{page.title}}">
   <ion-content class="padding">
-    <p ng-repeat="paragraph in pageDetail track by $index">
-      {{paragraph}}
+  	<div class="loading" ng-show="isLoading">Loading...</div>
+    <p ng-repeat="paragraph in pageDetail track by $index" ng-bind-html="getTag(paragraph)">
     </p>
-    <a class="button" href="#/tab/stars/pages/3">Test</a>
   </ion-content>
 </ion-view>

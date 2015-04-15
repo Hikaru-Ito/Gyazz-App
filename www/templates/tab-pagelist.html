@@ -1,5 +1,6 @@
 <ion-view view-title="PageList">
   <ion-content>
+    <div class="loading" ng-show="isLoading">Loading...</div>
     <ion-list can-swipe="true">
       <ion-item class="item-remove-animate item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.id}}">
         <h2>{{page.title}}</h2>

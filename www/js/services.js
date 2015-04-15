@@ -78,9 +78,13 @@ angular.module('starter.services', [])
                     if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
                       text = text.replace(/\[\[(.*?)\]\]/g, '<img src="$1">')
                     } else if(t.match(/(http|ftp):\/\/.+/)) {
-                      // URLの場合はリンクに変換
-                      text = text.replace(/\[\[(.*?)\]\]/g, '<a href="$1">$1</a>')
-
+                      if(t.match(/^ +/)) {
+                        // 文字付きリンクの場合は、変換(空白がある場合)
+                        text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
+                      } else {
+                        // URLの場合はリンクに変換
+                        text = text.replace(/\[\[(.*?)\]\]/g, '<a href="$1">$1</a>')
+                      }
                     } else {
                       // 普通の文字列の場合は、Gyazzページヘのリンクにする
                       text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab">$1</a>');
