@@ -1,6 +1,7 @@
 <ion-view view-title="{{page.title}}">
   <ion-content class="padding">
   	<div class="loading" ng-show="isLoading">Loading...</div>
+  	<div class="button" ng-click="openWebPage('http://shakewall.com/')">OpenPage</div>
     <p ng-repeat="paragraph in pageDetail track by $index" ng-bind-html="getTag(paragraph)">
     </p>
   </ion-content>
