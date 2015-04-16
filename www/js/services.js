@@ -1,5 +1,17 @@
 angular.module('starter.services', [])
 
+.directive('htmlData', function($compile, $parse) {
+    return {
+      restrict: 'C',
+      link: function(scope, element, attr) {
+        scope.$watch(attr.content, function() {
+          element.html($parse(attr.content)(scope));
+          $compile(element.contents())(scope);
+        }, true);
+      }
+    }
+  })
+
 .factory('Pages', function($http) {
 
   // Gyazzのページ一覧を取得する
@@ -79,7 +91,7 @@ angular.module('starter.services', [])
                         text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
                       } else {
                         // URLの場合はリンクに変換
-                        text = text.replace(/\[\[(.*?)\]\]/g, '<div class="button" ng-click="openWebPage(\'$1\')">ng-click="openWebPage(\'$1\')"</div>')
+                        text = text.replace(/\[\[(.*?)\]\]/g, '<div class="button" ng-click="openWebPage(\'$1\')">$1</div>')
                       }
                     } else {
                       // 普通の文字列の場合は、Gyazzページヘのリンクにする

@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $sce, $cordovaInAppBrowser, Pages) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, Pages) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   // ページ本文を読み込む
@@ -9,10 +9,6 @@ angular.module('starter.controllers', [])
   	$scope.pageDetail = detail
     $scope.isLoading = false;
   });
-  // htmlを埋め込むための変換関数
-  $scope.getTag = function(txt) {
-        return $sce.trustAsHtml(txt);
-  }
   // InAppBrowser
   $scope.openWebPage = function(url) {
    var options = {
