@@ -14,7 +14,7 @@ angular.module('starter.controllers', [])
    var options = {
         location: 'yes',
         clearcache: 'yes',
-        toolbar: 'no'
+        toolbar: 'yes'
       };
     $cordovaInAppBrowser.open(url, '_blank', options)
       .then(function(event) {}).catch(function(event) {});

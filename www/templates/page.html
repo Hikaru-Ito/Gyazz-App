@@ -1,4 +1,7 @@
 <ion-view view-title="{{page.title}}">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-star"></button>
+  </ion-nav-buttons>
   <ion-content class="padding">
   	<div class="loading" ng-show="isLoading">Loading...</div>
     <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph">
