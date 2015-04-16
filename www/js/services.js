@@ -35,14 +35,11 @@ angular.module('starter.services', [])
           return pages
         });
     },
-    getPage: function(pageId) {
-      console.log(pages);
-      for (var i = 0; i < pages.length; i++) {
-        if (pages[i].id === parseInt(pageId)) {
-          return pages[i];
-        }
+    getPage: function(pageTitle) {
+      var page = {
+        title : pageTitle
       }
-      return null;
+      return page;
     },
     getPageDetail: function(pageTitle) {
       return $.ajax({
@@ -57,7 +54,6 @@ angular.module('starter.services', [])
           var pageDetail = [];
           $.each(data.data, function(i, value) {
             // Gyazo記法をHTMLに変換する
-            console.log(value);
 
             var text = value;
                 // トリプルカッコに該当する場合
@@ -83,11 +79,11 @@ angular.module('starter.services', [])
                         text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
                       } else {
                         // URLの場合はリンクに変換
-                        text = text.replace(/\[\[(.*?)\]\]/g, '<a href="$1">$1</a>')
+                        text = text.replace(/\[\[(.*?)\]\]/g, '<div class="button" ng-click="openWebPage(\'$1\')">ng-click="openWebPage(\'$1\')"</div>')
                       }
                     } else {
                       // 普通の文字列の場合は、Gyazzページヘのリンクにする
-                      text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab">$1</a>');
+                      text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1">$1</a>');
                     }
                 }
                 // 先頭の空白をインデントに変換する

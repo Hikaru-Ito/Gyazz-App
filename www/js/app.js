@@ -49,7 +49,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
   .state('tab.pagelist-page', {
-    url: '/pagelist/pages/:pageId',
+    url: '/pagelist/pages/:pageTitle',
     views: {
       'tab-pagelist': {
         templateUrl: 'templates/page.html',

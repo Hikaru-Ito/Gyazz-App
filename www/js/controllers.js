@@ -2,7 +2,7 @@ angular.module('starter.controllers', [])
 
 
 .controller('PageCtrl', function($scope, $state, $stateParams, $sce, $cordovaInAppBrowser, Pages) {
-  $scope.page = Pages.getPage($stateParams.pageId);
+  $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   // ページ本文を読み込む
   Pages.getPageDetail($scope.page.title).then(function(detail) {

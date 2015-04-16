@@ -2,7 +2,7 @@
   <ion-content>
     <div class="loading" ng-show="isLoading">Loading...</div>
     <ion-list can-swipe="true">
-      <ion-item class="item-remove-animate item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.id}}">
+      <ion-item class="item-remove-animate item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.title}}">
         <h2>{{page.title}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>
         <ion-option-button class="button-energized" ng-click="show()">
