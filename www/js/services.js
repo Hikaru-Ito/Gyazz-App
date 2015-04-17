@@ -1,5 +1,7 @@
 angular.module('starter.services', [])
 
+.constant('GYAZZ_WIKI_URL', 'http://gyazz.com/Gyazz/')
+
 .directive('htmlData', function($compile, $parse) {
     return {
       restrict: 'C',
@@ -12,7 +14,7 @@ angular.module('starter.services', [])
     }
   })
 
-.factory('Pages', function($http) {
+.factory('Pages', function($http, GYAZZ_WIKI_URL) {
 
   // Gyazzのページ一覧を取得する
   var pages = [];
@@ -24,7 +26,7 @@ angular.module('starter.services', [])
   return {
     getPages: function() {
       return $.ajax({
-        url: 'http://gyazz.com/Gyazz/',
+        url: GYAZZ_WIKI_URL,
         // xhrFields: {
         //   withCredentials: true
         // },
@@ -55,7 +57,7 @@ angular.module('starter.services', [])
     },
     getPageDetail: function(pageTitle) {
       return $.ajax({
-        url: 'http://gyazz.com/Gyazz/'+pageTitle+'/json',
+        url: GYAZZ_WIKI_URL+pageTitle+'/json',
         // xhrFields: {
         //   withCredentials: true
         // },
