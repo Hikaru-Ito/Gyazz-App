@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.constant('GYAZZ_WIKI_URL', 'http://gyazz.com/Gyazz/')
+.constant('GYAZZ_WIKI_URL', 'http://gyazz.com/Hikaru/')
 
 .directive('htmlData', function($compile, $parse) {
     return {
@@ -19,11 +19,11 @@ angular.module('starter.services', [])
   // Gyazzのページ一覧を取得する
   var pages = [];
 
-  // http://feed.rssad.jp/rss/gigazine/rss_atom
-  // http://gyazz.masuilab.org/%E5%A2%97%E4%BA%95%E7%A0%94
-  // http://gyazz.com/Gyazz/
 
   return {
+    writePages: function(title, data) {
+      return null
+    },
     getPages: function() {
       return $.ajax({
         url: GYAZZ_WIKI_URL,
@@ -70,6 +70,8 @@ angular.module('starter.services', [])
             // Gyazo記法をHTMLに変換する
 
             var text = value;
+            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data">'+text+'</textarea></label>';
+
                 // トリプルカッコに該当する場合
                 if(text.match(/\[\[\[/g)) {
                     var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
@@ -87,7 +89,7 @@ angular.module('starter.services', [])
                     // 画像URLの場合はimgタグに変換
                     if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
                       text = text.replace(/\[\[(.*?)\]\]/g, '<img src="$1">')
-                    } else if(t.match(/(http|ftp):\/\/.+/)) {
+                    } else if(t.match(/(http[s]?):\/\/.+/)) {
                       if(t.match(/^ +/)) {
                         // 文字付きリンクの場合は、変換(空白がある場合)
                         text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
@@ -106,6 +108,8 @@ angular.module('starter.services', [])
                   text = text.replace(/^ +/g, '□');
                 }
 
+
+            text = '<span class="conversion_text">' + text + '</span>' + original_data;
 
             // 配列に再置換
             pageDetail.push(text);

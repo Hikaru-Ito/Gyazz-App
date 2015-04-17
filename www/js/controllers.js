@@ -19,6 +19,33 @@ angular.module('starter.controllers', [])
     $cordovaInAppBrowser.open(url, '_blank', options)
       .then(function(event) {}).catch(function(event) {});
   }
+  // ページを編集モードに切り替え
+  $scope.editMode = function(event) {
+    var _this = $(event.currentTarget);
+    // テキストを一旦非表示
+    _this.find('.conversion_text').hide();
+    // フォームを表示
+    _this.find('.raw-textarea').show();
+    // フォームにフォーカスを当てる
+    setTimeout(function(){
+         _this.find('textarea').focus();
+    }, 0);
+  }
+  // 編集モード終了（全要素に適応）
+  $scope.endEditMode = function() {
+    // ******ここに内容を反映させるスクリプトをかく***********
+    var texts_area = $('.htmlData');
+    // テキストを一旦非表示
+    texts_area.find('.conversion_text').show();
+    // フォームを表示
+    texts_area.find('.raw-textarea').hide();
+    // フォームのフォーカスを外す
+    setTimeout(function(){
+         texts_area.find('textarea').blur();
+    }, 0);
+  }
+
+
 })
 
 .controller('PagelistCtrl', function($scope, $timeout, $ionicLoading, Pages) {

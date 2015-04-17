@@ -4,7 +4,8 @@
   </ion-nav-buttons>
   <ion-content class="padding">
   	<div class="loading" ng-show="isLoading">Loading...</div>
-    <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph">
+  	<div class="button" ng-click="endEditMode()">編集終了</div>
+    <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event)">
     </p>
   </ion-content>
 </ion-view>
