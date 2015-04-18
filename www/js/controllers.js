@@ -4,6 +4,7 @@ angular.module('starter.controllers', [])
 .controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, Pages) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
+  $scope.isWriting = false;
   // ページ本文を読み込む
   Pages.getPageDetail($scope.page.title).then(function(detail) {
   	$scope.pageDetail = detail
@@ -21,6 +22,9 @@ angular.module('starter.controllers', [])
   }
   // ページを編集モードに切り替え
   $scope.editMode = function(event) {
+    // 現在編集モードの他の項目があれば終了させる
+    $scope.endEditMode();
+
     var _this = $(event.currentTarget);
     // テキストを一旦非表示
     _this.find('.conversion_text').hide();
@@ -29,11 +33,20 @@ angular.module('starter.controllers', [])
     // フォームにフォーカスを当てる
     setTimeout(function(){
          _this.find('textarea').focus();
-    }, 0);
+    }, 100);
   }
   // 編集モード終了（全要素に適応）
   $scope.endEditMode = function() {
     // ******ここに内容を反映させるスクリプトをかく***********
+    // 変更内容を書き込む
+    $scope.isWriting = true;
+    var edit_data = $(':focus').val();
+    if(edit_data !== undefined) {
+      Pages.writePage($scope.page.title, edit_data).then(function(data) {
+        console.log(data);
+        $scope.isWriting = false;
+      });
+    }
     var texts_area = $('.htmlData');
     // テキストを一旦非表示
     texts_area.find('.conversion_text').show();

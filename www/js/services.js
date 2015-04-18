@@ -1,6 +1,7 @@
 angular.module('starter.services', [])
 
-.constant('GYAZZ_WIKI_URL', 'http://gyazz.com/Hikaru/')
+.constant('GYAZZ_URL', 'http://gyazz.com/')
+.constant('GYAZZ_WIKI_NAME', 'Hikaru')
 
 .directive('htmlData', function($compile, $parse) {
     return {
@@ -14,19 +15,34 @@ angular.module('starter.services', [])
     }
   })
 
-.factory('Pages', function($http, GYAZZ_WIKI_URL) {
+.factory('Pages', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
 
   // Gyazzのページ一覧を取得する
   var pages = [];
 
 
   return {
-    writePages: function(title, data) {
-      return null
+    writePage: function(title, data) {
+      return $.ajax({
+          type: "POST",
+          url: GYAZZ_URL + '__write',
+          data: {
+              name: GYAZZ_WIKI_NAME,
+              title: title,
+              orig_md5: 'ec0c02c2884ec60d59cb38ec711e34f4',
+              data: data
+          }
+      }).done(function(data){
+        console.log('書き込み成功');
+        return data;
+      }).fail(function(data){
+        console.log('書き込み失敗');
+        return data;
+      });
     },
     getPages: function() {
       return $.ajax({
-        url: GYAZZ_WIKI_URL,
+        url: GYAZZ_URL + GYAZZ_WIKI_NAME,
         // xhrFields: {
         //   withCredentials: true
         // },
@@ -57,7 +73,7 @@ angular.module('starter.services', [])
     },
     getPageDetail: function(pageTitle) {
       return $.ajax({
-        url: GYAZZ_WIKI_URL+pageTitle+'/json',
+        url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/'+pageTitle+'/json',
         // xhrFields: {
         //   withCredentials: true
         // },
