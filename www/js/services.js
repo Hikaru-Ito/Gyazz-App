@@ -84,8 +84,8 @@ angular.module('starter.services', [])
           var pageDetail = [];
           $.each(data.data, function(i, value) {
 
-            var text = value;
-            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'"></textarea></label>';
+            var text = value;// ng-blur="endEditMode()"
+            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'" ng-change="onInputText($eve)" ng-blur="endEditMode()"></textarea></label>';
             // text = '<span class="conversion_text">' + text + '</span>' + original_data;
             text = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+i+')"></span>' + original_data;
 

@@ -1,6 +1,22 @@
 /* Empty. Add your own CSS if you like */
+.editingPadding {
+	content:' ';
+	height: 100px;
+	width: 100px;
+}
 .raw-textarea {
 	border-bottom:2px solid #aaa;
+}
+textarea.test_textarea {
+	width: 100%;
+	position: absolute;
+	top:0;
+	right: 0;
+	font-size: 130%;
+	line-height: 1.5;
+	color:#2962FF;
+	font-weight: bold;
+	padding-bottom:100px;
 }
 textarea.original_data {
 	font-size: 130%;

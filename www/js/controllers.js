@@ -1,11 +1,12 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, $ionicModal, Pages) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, $ionicModal, $timeout, Pages) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
   $scope.beforeEditText = null;
+  $scope.isEditing = false;
   // ページ本文を読み込む
   Pages.getPageDetail($scope.page.title).then(function(detail) {
   	$scope.pageDetail = detail
@@ -39,32 +40,96 @@ angular.module('starter.controllers', [])
     $scope.closeModal = function() {
       $scope.modal.hide();
     };
+  // スワイプでカーソル移動
+  $scope.swipeRight = function() {
+    if($scope.isEditing) {
+      $scope.insertGyazzMark('[');
+      // var target_area = $(':focus');
+      //     target_area = target_area.get(0);
+      // var o = target_area;
+      // var p = o.selectionStart;
+      // var np = p + 1;
+      // o.setSelectionRange(np, np);
+      // o.focus();
+    }
+  }
+  $scope.swipeLeft = function() {
+    if($scope.isEditing) {
+      $scope.insertGyazzMark(']');
+      // var target_area = $(':focus');
+      //     target_area = target_area.get(0);
+      // var o = target_area;
+      // var p = o.selectionStart;
+      // var np = p - 1;
+      // o.setSelectionRange(np, np);
+      // o.focus();
+    }
+  }
+  // 記号挿入
+  $scope.insertGyazzMark = function(mark) {
+    // console.log(mark);
+    // // フォーカスされているテキストエリアを指定
+    var target_area = $(':focus');
+        target_area = target_area.get(0);
+    // //target_area.focus();
+    var o = target_area;
+    var s = o.value;
+    var p = o.selectionStart;
+    var np = p + mark.length;
+    o.value = s.substr(0, p) + mark + s.substr(p);
+    o.setSelectionRange(np, np);
+
+      //$timeout(function(){
+          o.focus();
+      //}, 1000);
+    //$('.test_wrapper').find('textarea').focus();
+  }
+  // テキストエリア自動可変
+  $scope.onInputText = function(evt) {
+    var _this = event;
+    if(_this.currentTarget.scrollHeight > _this.currentTarget.offsetHeight){
+        $(_this.currentTarget).height(_this.currentTarget.scrollHeight);
+    }else{
+        var lineHeight = Number($(_this.currentTarget).css("lineHeight").split("px")[0]);
+        while (true){
+            $(_this.currentTarget).height($(_this.currentTarget).height() - lineHeight);
+            if(_this.currentTarget.scrollHeight > _this.currentTarget.offsetHeight){
+                $(_this.currentTarget).height(_this.currentTarget.scrollHeight);
+                break;
+            }
+        }
+    }
+  }
   // ページを編集モードに切り替え
   $scope.editMode = function(event) {
-    // 現在編集モードの他の項目があれば終了させる
-    $scope.endEditMode();
-
+    $scope.isEditing = true;
     var _this = $(event.currentTarget);
-    // 編集中のボックスにクラスをつけておく
-    _this.addClass('isEditing');
-    // テキストを一旦非表示
-    _this.find('.conversion_text').hide();
-    // フォームを表示
-    _this.find('.raw-textarea').show();
-    // 変更前内容を記憶
-    $scope.beforeEditText = _this.find('textarea').val();
-    // フォームにフォーカスを当てる
-    setTimeout(function(){
-         _this.find('textarea').focus();
-    }, 100);
+    // 現在編集中の要素のロングタップの場合はキャンセルする
+    if(!_this.hasClass('isEditing')) {
+      // 現在編集モードの他の項目があれば終了させる
+      $scope.endEditMode();
+      // 編集中のボックスにクラスをつけておく
+      _this.addClass('isEditing');
+      // テキストを一旦非表示
+      _this.find('.conversion_text').hide();
+      // フォームを表示
+      _this.find('.raw-textarea').show();
+      // 変更前内容を記憶
+      $scope.beforeEditText = _this.find('textarea').val();
+      // フォームにフォーカスを当てる
+      $timeout(function(){
+           _this.find('textarea').focus();
+      }, 200);
+    }
   }
   // 編集モード終了（全要素に適応）
   $scope.endEditMode = function() {
     // 変更内容を書き込む
     var isEditing = $('.isEditing');
     var edit_data = isEditing.find('textarea').val();
-        isEditing.removeClass('.isEditing');
+    isEditing.removeClass('isEditing');
     if(edit_data !== undefined) {
+      $scope.isEditing = false;
       // 変更があるか比較する
       if(edit_data !== $scope.beforeEditText) { // 最初のロングタップ時にも動作するため判別
         $scope.isWriting = true;
@@ -79,7 +144,7 @@ angular.module('starter.controllers', [])
                   for (i = 0; i < arr.length; i++) {
                     var insertNumber = pageDetailNumber + i;
                     var content_num = $scope.pageDetail.length;
-                    var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'"></textarea></label>';
+                    var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'" ng-change="onInputText($eve)"></textarea></label>';
                     $scope.pageDetail.splice(insertNumber+1, 0, insertHtmlData);
                   }
                   // 編集前のパラグラフを削除
@@ -105,7 +170,7 @@ angular.module('starter.controllers', [])
     // フォームを表示
     texts_area.find('.raw-textarea').hide();
     // フォームのフォーカスを外す
-    setTimeout(function(){
+    $timeout(function(){
          texts_area.find('textarea').blur();
     }, 0);
   }
