@@ -85,11 +85,7 @@ angular.module('starter.controllers', [])
     var np = p + mark.length;
     o.value = s.substr(0, p) + mark + s.substr(p);
     o.setSelectionRange(np, np);
-
-      //$timeout(function(){
-          o.focus();
-      //}, 1000);
-    //$('.test_wrapper').find('textarea').focus();
+    o.focus();
   }
   // テキストエリア自動可変
   $scope.onInputText = function(evt) {
@@ -143,31 +139,27 @@ angular.module('starter.controllers', [])
         // ページの内容を全取得して連結させる
         var page_all_data = '';
         $('.raw-textarea .original_data').each(function(i) {
-              var pageDetailNumber = i;
-              var text_data = $(this).val();
-              // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
-              if (text_data.match(/\r\n/) || text_data.match(/(\n|\r)/)) {
-                  arr = text_data.split(/\r\n|\r|\n/);
-                  for (i = 0; i < arr.length; i++) {
-                    var insertNumber = pageDetailNumber + i;
-                    var content_num = $scope.pageDetail.length;
-                    var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'" ng-change="onInputText($eve)"></textarea></label>';
-                    $scope.pageDetail.splice(insertNumber+1, 0, insertHtmlData);
-                  }
-                  // 編集前のパラグラフを削除
-                  $scope.pageDetail.splice(pageDetailNumber, 1);
-              }
-              page_all_data += text_data;
-              page_all_data += '\n';
+          var pageDetailNumber = i;
+          var text_data = $(this).val();
+          // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
+          if (text_data.match(/\r\n/) || text_data.match(/(\n|\r)/)) {
+            arr = text_data.split(/\r\n|\r|\n/);
+            for (i = 0; i < arr.length; i++) {
+              var insertNumber = pageDetailNumber + i;
+              var content_num = $scope.pageDetail.length;
+              var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'" ng-change="onInputText($eve)"></textarea></label>';
+              $scope.pageDetail.splice(insertNumber+1, 0, insertHtmlData);
+            }
+            // 編集前のパラグラフを削除
+            $scope.pageDetail.splice(pageDetailNumber, 1);
+          }
+          page_all_data += text_data;
+          page_all_data += '\n';
         });
-          console.log(page_all_data);
-
         Pages.writePage($scope.page.title, page_all_data).then(function(data) {
-          console.log(data);
           $scope.isWriting = false;
         });
       } else {
-        console.log('へんこうなし');
         $scope.isWriting = false;
       }
     }
@@ -185,7 +177,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('PagelistCtrl', function($scope, $timeout, $ionicLoading, Pages) {
+.controller('PagelistCtrl', function($scope, $timeout, $ionicPopup, $ionicLoading, Pages) {
   $scope.isLoading = true;
 	// ページ一覧を読み込む
 	Pages.getPages().then(function(pages) {
@@ -200,7 +192,43 @@ angular.module('starter.controllers', [])
     });
   };
 })
-
+.controller('NewpageCtrl',function($scope, $ionicPopup, $location, $timeout) {
+  $scope.goNewPage = function(title) {
+    $location.path('/tab/pagelist/pages/'+title);
+  }
+  $scope.showPopup = function() {
+    //alert('hey');
+    $scope.data = {}
+    // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="data.title">',
+      title: '新規作成するページ名を入力',
+      subTitle: '空白と/は使用禁止',
+      scope: $scope,
+      buttons: [
+        { text: 'キャンセル' },
+        {
+          text: '<b>作成</b>',
+          type: 'button-positive',
+          onTap: function(e) {
+            if (!$scope.data.title) {
+              e.preventDefault();
+            } else {
+              return $scope.data.title;
+            }
+          }
+        }
+      ]
+    });
+    myPopup.then(function(res) {
+      if(res !== undefined) {
+        $scope.goNewPage(res)
+      } else {
+        console.log('キャンセル');
+      }
+    });
+   };
+})
 .controller('StarsCtrl', function($scope, Pages) {
 	$scope.pages = Pages.all();
 })
