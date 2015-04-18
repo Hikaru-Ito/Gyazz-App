@@ -3,9 +3,10 @@
     <button class="button button-icon icon ion-compose"></button>
   </ion-nav-buttons>
   <ion-content>
-    <div class="loading" ng-show="isLoading">Loading...</div>
+    <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
+    <ion-refresher on-refresh="doRefresh()" spinner="ripple"></ion-refresher>
     <ion-list can-swipe="true">
-      <ion-item class="item-remove-animate item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.title}}">
+      <ion-item class="gyazz-pagelist item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.title}}">
         <h2>{{page.title}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>
         <ion-option-button class="button-energized" ng-click="show()">

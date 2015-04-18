@@ -18,7 +18,6 @@ angular.module('starter.services', [])
 .factory('Pages', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
 
   // Gyazzのページ一覧を取得する
-  var pages = [];
 
 
   return {
@@ -51,6 +50,7 @@ angular.module('starter.services', [])
         // }
       }).then(function(data) {
           var i = 0;
+          var pages = [];
           $(data).find('.tag').each(function() {
             var gyazz_page = {
               id : i,
@@ -120,20 +120,23 @@ angular.module('starter.services', [])
             } else if(t.match(/(http[s]?):\/\/.+/)) {
               if(t.match(/^ +/)) {
                 // 文字付きリンクの場合は、変換(空白がある場合)
-                text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
+                text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1" class="gyazz_link">$2</a>');
               } else {
                 // URLの場合はリンクに変換
                 text = text.replace(/\[\[(.*?)\]\]/g, '<div class="button" ng-click="openWebPage(\'$1\')">$1</div>')
               }
             } else {
               // 普通の文字列の場合は、Gyazzページヘのリンクにする
-              text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1">$1</a>');
+              text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1" class="gyazz_link">$1</a>');
             }
         }
         // 先頭の空白をインデントに変換する
         if(text.match(/^ +/)) {
           // 先頭から連続した空白のインデントは未実装
-          text = text.replace(/^ +/g, '□');
+          text = text.replace(/^ +/g, '<span class="indent icon ion-arrow-right-b"></span>');
+        } else {
+          // 大見出し（空白なし）の場合
+          text = '<span class="caption">' + text + '</span>';
         }
         return text
     }

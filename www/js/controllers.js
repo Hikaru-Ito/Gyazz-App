@@ -26,6 +26,13 @@ angular.module('starter.controllers', [])
   $scope.transParagraph = function(rawData) {
     return Pages.transParagraph(rawData);
   }
+  // PullToRefresh
+  $scope.doRefresh = function() {
+    Pages.getPageDetail($scope.page.title).then(function(detail) {
+      $scope.pageDetail = detail
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
   // 編集Modal表示
   $scope.rawData = 'TestData[[Hikaru]]'
    $ionicModal.fromTemplateUrl('templates/modal-editpage.html', {
@@ -119,7 +126,7 @@ angular.module('starter.controllers', [])
       // フォームにフォーカスを当てる
       $timeout(function(){
            _this.find('textarea').focus();
-      }, 200);
+      }, 0);
     }
   }
   // 編集モード終了（全要素に適応）
@@ -185,6 +192,13 @@ angular.module('starter.controllers', [])
         $scope.pages = pages;
         $scope.isLoading = false;
     });
+  // PullToRefresh
+  $scope.doRefresh = function() {
+    Pages.getPages().then(function(pages) {
+      $scope.pages = pages;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
 })
 
 .controller('StarsCtrl', function($scope, Pages) {
