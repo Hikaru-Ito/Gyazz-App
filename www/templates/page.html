@@ -1,11 +1,10 @@
 <ion-view view-title="{{page.title}}">
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-star"></button>
+    <button class="button button-icon icon ion-star" ng-click="openModal()"></button>
   </ion-nav-buttons>
   <ion-content class="padding">
   	<div class="loading" ng-show="isLoading">Loading...</div>
   	<div class="loading" ng-show="isWriting">書き込み中</div>
-  	<div class="button" ng-click="endEditMode()">編集終了</div>
     <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event)">
     </p>
   </ion-content>

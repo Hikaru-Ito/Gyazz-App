@@ -83,49 +83,11 @@ angular.module('starter.services', [])
       }).then(function(data) {
           var pageDetail = [];
           $.each(data.data, function(i, value) {
-            // Gyazo記法をHTMLに変換する
 
             var text = value;
-            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data">'+text+'</textarea></label>';
-
-                // トリプルカッコに該当する場合
-                if(text.match(/\[\[\[/g)) {
-                    var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
-                    // 画像URLの場合は縮小したimgタグに変換
-                    if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
-                      text = text.replace(/\[\[\[(.*?)\]\]\]/g, '<img src="$1" class="mini_img">')
-                    } else {
-                      // 文字列の場合は太字への変換
-                      text = text.replace(/\[\[\[(.*?)\]\]\]/g, '<b>$1</b>')
-                    }
-                }
-                // ダブルカッコに該当する場合
-                if(text.match(/\[\[/g)) {
-                    var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
-                    // 画像URLの場合はimgタグに変換
-                    if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
-                      text = text.replace(/\[\[(.*?)\]\]/g, '<img src="$1">')
-                    } else if(t.match(/(http[s]?):\/\/.+/)) {
-                      if(t.match(/^ +/)) {
-                        // 文字付きリンクの場合は、変換(空白がある場合)
-                        text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
-                      } else {
-                        // URLの場合はリンクに変換
-                        text = text.replace(/\[\[(.*?)\]\]/g, '<div class="button" ng-click="openWebPage(\'$1\')">$1</div>')
-                      }
-                    } else {
-                      // 普通の文字列の場合は、Gyazzページヘのリンクにする
-                      text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1">$1</a>');
-                    }
-                }
-                // 先頭の空白をインデントに変換する
-                if(text.match(/^ +/)) {
-                  // 先頭から連続した空白のインデントは未実装
-                  text = text.replace(/^ +/g, '□');
-                }
-
-
-            text = '<span class="conversion_text">' + text + '</span>' + original_data;
+            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'"></textarea></label>';
+            // text = '<span class="conversion_text">' + text + '</span>' + original_data;
+            text = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+i+')"></span>' + original_data;
 
             // 配列に再置換
             pageDetail.push(text);
@@ -133,6 +95,47 @@ angular.module('starter.services', [])
 
           return pageDetail
       });
+    },
+    transParagraph: function(text) {
+        //
+        // Gyazo記法をHTMLに変換する
+        //
+        // トリプルカッコに該当する場合
+        if(text.match(/\[\[\[/g)) {
+            var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
+            // 画像URLの場合は縮小したimgタグに変換
+            if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
+              text = text.replace(/\[\[\[(.*?)\]\]\]/g, '<img src="$1" class="mini_img">')
+            } else {
+              // 文字列の場合は太字への変換
+              text = text.replace(/\[\[\[(.*?)\]\]\]/g, '<b>$1</b>')
+            }
+        }
+        // ダブルカッコに該当する場合
+        if(text.match(/\[\[/g)) {
+            var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
+            // 画像URLの場合はimgタグに変換
+            if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
+              text = text.replace(/\[\[(.*?)\]\]/g, '<img src="$1">')
+            } else if(t.match(/(http[s]?):\/\/.+/)) {
+              if(t.match(/^ +/)) {
+                // 文字付きリンクの場合は、変換(空白がある場合)
+                text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<a href="$1">$2</a>');
+              } else {
+                // URLの場合はリンクに変換
+                text = text.replace(/\[\[(.*?)\]\]/g, '<div class="button" ng-click="openWebPage(\'$1\')">$1</div>')
+              }
+            } else {
+              // 普通の文字列の場合は、Gyazzページヘのリンクにする
+              text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1">$1</a>');
+            }
+        }
+        // 先頭の空白をインデントに変換する
+        if(text.match(/^ +/)) {
+          // 先頭から連続した空白のインデントは未実装
+          text = text.replace(/^ +/g, '□');
+        }
+        return text
     }
   };
 });

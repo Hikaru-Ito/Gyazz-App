@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, Pages) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, $ionicModal, Pages) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
@@ -21,12 +21,32 @@ angular.module('starter.controllers', [])
     $cordovaInAppBrowser.open(url, '_blank', options)
       .then(function(event) {}).catch(function(event) {});
   }
+  // Gyazz記法変換
+  $scope.transParagraph = function(rawData) {
+    return Pages.transParagraph(rawData);
+  }
+  // 編集Modal表示
+  $scope.rawData = 'TestData[[Hikaru]]'
+   $ionicModal.fromTemplateUrl('templates/modal-editpage.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+      $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+    };
   // ページを編集モードに切り替え
   $scope.editMode = function(event) {
     // 現在編集モードの他の項目があれば終了させる
     $scope.endEditMode();
 
     var _this = $(event.currentTarget);
+    // 編集中のボックスにクラスをつけておく
+    _this.addClass('isEditing');
     // テキストを一旦非表示
     _this.find('.conversion_text').hide();
     // フォームを表示
@@ -41,15 +61,31 @@ angular.module('starter.controllers', [])
   // 編集モード終了（全要素に適応）
   $scope.endEditMode = function() {
     // 変更内容を書き込む
-    var edit_data = $(':focus').val();
+    var isEditing = $('.isEditing');
+    var edit_data = isEditing.find('textarea').val();
+        isEditing.removeClass('.isEditing');
     if(edit_data !== undefined) {
       // 変更があるか比較する
-      if(edit_data !== $scope.beforeEditText) {
+      if(edit_data !== $scope.beforeEditText) { // 最初のロングタップ時にも動作するため判別
         $scope.isWriting = true;
         // ページの内容を全取得して連結させる
         var page_all_data = '';
-        $('.raw-textarea .original_data').each(function() {
-              page_all_data += $(this).val();
+        $('.raw-textarea .original_data').each(function(i) {
+              var pageDetailNumber = i;
+              var text_data = $(this).val();
+              // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
+              if (text_data.match(/\r\n/) || text_data.match(/(\n|\r)/)) {
+                  arr = text_data.split(/\r\n|\r|\n/);
+                  for (i = 0; i < arr.length; i++) {
+                    var insertNumber = pageDetailNumber + i;
+                    var content_num = $scope.pageDetail.length;
+                    var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'"></textarea></label>';
+                    $scope.pageDetail.splice(insertNumber+1, 0, insertHtmlData);
+                  }
+                  // 編集前のパラグラフを削除
+                  $scope.pageDetail.splice(pageDetailNumber, 1);
+              }
+              page_all_data += text_data;
               page_all_data += '\n';
         });
           console.log(page_all_data);
@@ -59,6 +95,7 @@ angular.module('starter.controllers', [])
           $scope.isWriting = false;
         });
       } else {
+        console.log('へんこうなし');
         $scope.isWriting = false;
       }
     }

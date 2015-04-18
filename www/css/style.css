@@ -4,8 +4,16 @@
 }
 textarea.original_data {
 	font-size: 130%;
+	line-height: 1.5;
+	color:#2962FF;
+	font-weight: bold;
+}
+textarea.edit_page_textarea {
+	width:100%;
+	font-size: 110%;
 	line-height: 210%;
 	color:#2962FF;
 	font-weight: bold;
-	height:auto;
+	height: 300px;
+	resize: none;
 }
