@@ -5,6 +5,7 @@ angular.module('starter.controllers', [])
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
+  $scope.beforeEditText = null;
   // ページ本文を読み込む
   Pages.getPageDetail($scope.page.title).then(function(detail) {
   	$scope.pageDetail = detail
@@ -30,6 +31,8 @@ angular.module('starter.controllers', [])
     _this.find('.conversion_text').hide();
     // フォームを表示
     _this.find('.raw-textarea').show();
+    // 変更前内容を記憶
+    $scope.beforeEditText = _this.find('textarea').val();
     // フォームにフォーカスを当てる
     setTimeout(function(){
          _this.find('textarea').focus();
@@ -37,15 +40,27 @@ angular.module('starter.controllers', [])
   }
   // 編集モード終了（全要素に適応）
   $scope.endEditMode = function() {
-    // ******ここに内容を反映させるスクリプトをかく***********
     // 変更内容を書き込む
-    $scope.isWriting = true;
     var edit_data = $(':focus').val();
     if(edit_data !== undefined) {
-      Pages.writePage($scope.page.title, edit_data).then(function(data) {
-        console.log(data);
+      // 変更があるか比較する
+      if(edit_data !== $scope.beforeEditText) {
+        $scope.isWriting = true;
+        // ページの内容を全取得して連結させる
+        var page_all_data = '';
+        $('.raw-textarea .original_data').each(function() {
+              page_all_data += $(this).val();
+              page_all_data += '\n';
+        });
+          console.log(page_all_data);
+
+        Pages.writePage($scope.page.title, page_all_data).then(function(data) {
+          console.log(data);
+          $scope.isWriting = false;
+        });
+      } else {
         $scope.isWriting = false;
-      });
+      }
     }
     var texts_area = $('.htmlData');
     // テキストを一旦非表示
