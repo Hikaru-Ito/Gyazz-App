@@ -195,7 +195,7 @@ angular.module('starter.controllers', [])
         $scope.isWriting = true;
         // ページの内容を全取得して連結させる
         var page_all_data = '';
-        $('ion-nav-view[nav-view="active"] .raw-textarea .original_data').each(function(i) {
+        $('ion-nav-view[nav-view="active"] ion-view[nav-view="active"] .raw-textarea .original_data').each(function(i) {
           var pageDetailNumber = i;
           var text_data = $(this).val();
           // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
