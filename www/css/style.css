@@ -126,6 +126,7 @@ ion-refresher .spinner svg {
 	font-weight: bold;
 	color: #fff;
 	background: #666;
+	border-bottom: 2px solid #555;
 }
 .gyazz_page .conversion_text {
 	font-size: 116%;

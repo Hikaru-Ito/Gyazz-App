@@ -22,7 +22,7 @@ angular.module('starter.services', [])
       console.log("SQL 実行中にエラーが発生しました: "+err.code);
     }
     function initQuery(tx) {
-        tx.executeSql('DROP TABLE IF EXISTS TestTable');
+        //tx.executeSql('DROP TABLE IF EXISTS TestTable');
         tx.executeSql('CREATE TABLE IF NOT EXISTS TestTable (id integer primary key autoincrement, title text unique, created datetime default current_timestamp)');
     }
     function successCB() {
@@ -46,6 +46,25 @@ angular.module('starter.services', [])
 .factory('Stars', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME, DB) {
 
   var stars = [];
+
+  var init = function() {
+    DB.query('SELECT * FROM TestTable ORDER BY created DESC')
+      .then(function(result){
+          stars = [];
+          var len = result.rows.length;
+          for (var i=0; i<len; i++){
+            //stars = new Array;
+            var star = {
+              id : result.rows.item(i).id,
+              title : result.rows.item(i).title,
+              created : result.rows.item(i).created
+            }
+            stars.push(star);
+          }
+          return stars;
+      });
+  }
+  init();
 
   return {
     getStars: function() {
@@ -74,6 +93,19 @@ angular.module('starter.services', [])
               //created : result.rows.item(i).created
             }
             stars.unshift(star);
+            return result;
+        });
+    },
+    removeStar: function(title) {
+      return DB.query('DELETE FROM TestTable WHERE title = "'+title+'"')
+        .then(function(result){
+            for (var i=0; i<stars.length; i++){
+              var remove_title = stars[i].title;
+              if(remove_title == title) {
+                stars.splice(i, 1);
+                break;
+              }
+            }
             return result;
         });
     },

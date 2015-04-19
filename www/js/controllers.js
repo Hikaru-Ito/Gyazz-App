@@ -34,9 +34,12 @@ angular.module('starter.controllers', [])
     return Stars.checkStar($scope.page.title)
   }
   // スターに追加
-  $scope.addStar = function(title) {
-    Stars.addStar(title).then(function(detail) {
-      console.log(detail);
+  $scope.addStar = function() {
+    Stars.addStar($scope.page.title).then(function(detail) {
+    });
+  }
+  $scope.removeStar = function() {
+    Stars.removeStar($scope.page.title).then(function(detail) {
     });
   }
   // Gyazz記法変換
