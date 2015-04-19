@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, $ionicModal, $timeout, $location, Pages) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, $ionicModal, $timeout, $location, Pages, Stars) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
@@ -28,6 +28,16 @@ angular.module('starter.controllers', [])
     // 現在のタブのstateを取得
     var tab_name = this_page.split('/');
     $location.path('/tab/'+tab_name[2]+'/pages/'+title);
+  }
+  // スターの確認
+  $scope.checkStar = function() {
+    return Stars.checkStar($scope.page.title)
+  }
+  // スターに追加
+  $scope.addStar = function(title) {
+    Stars.addStar(title).then(function(detail) {
+      console.log(detail);
+    });
   }
   // Gyazz記法変換
   $scope.transParagraph = function(rawData) {
@@ -268,20 +278,17 @@ angular.module('starter.controllers', [])
 .controller('StarsCtrl', function($scope, Stars) {
   $scope.isLoading = true;
   // スター覧を読み込む
-  // Stars.getStars().then(function(stars) {
-  //   $scope.stars = stars;
-  //   $scope.isLoading = false;
-  //   });
-  $scope.stars = Stars.getStars();
-  $scope.isLoading = false;
-
-  // PullToRefresh
-  // $scope.doRefresh = function() {
-  //   Stars.getStars().then(function(stars) {
-  //     $scope.stars = stars;
-  //     $scope.$broadcast('scroll.refreshComplete');
-  //   });
-  // };
+  Stars.getStars().then(function(stars) {
+    $scope.stars = stars;
+    $scope.isLoading = false;
+    });
+  //PullToRefresh
+  $scope.doRefresh = function() {
+    Stars.getStars().then(function(stars) {
+      $scope.stars = stars;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
 })
 
 .controller('RandomCtrl', function($scope, $http) {})

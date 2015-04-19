@@ -14,21 +14,79 @@ angular.module('starter.services', [])
       }
     }
   })
-.factory('Stars', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
+.factory('DB', function($q) {
+    var db;
+    var self = this;
+
+    function errorCB(err) {
+      console.log("SQL 実行中にエラーが発生しました: "+err.code);
+    }
+    function initQuery(tx) {
+        tx.executeSql('DROP TABLE IF EXISTS TestTable');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS TestTable (id integer primary key autoincrement, title text unique, created datetime default current_timestamp)');
+    }
+    function successCB() {
+    }
+    db = window.openDatabase("Database", "1.0", "TestDatabase", 200000);
+    db.transaction(initQuery, errorCB, successCB);
+
+    self.query = function(query) {
+        var deferred = $q.defer();
+        db.transaction(function(transaction) {
+            transaction.executeSql(query, [], function(transaction, result) {
+                deferred.resolve(result);
+            }, function(transaction, error) {
+                deferred.reject(error);
+            });
+        });
+        return deferred.promise;
+    };
+    return self;
+})
+.factory('Stars', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME, DB) {
+
+  var stars = [];
+
   return {
     getStars: function() {
-      var stars = [
-        {
-          id:1,
-          title:'テストスター',
-          created:'2015-04-22'
-        },
-        {
-          id:2,
-          title:'テストスター2',
-          created:'2015-04-23'
-        }];
-      return stars
+      return DB.query('SELECT * FROM TestTable ORDER BY created DESC')
+        .then(function(result){
+            stars = [];
+            var len = result.rows.length;
+            for (var i=0; i<len; i++){
+              //stars = new Array;
+              var star = {
+                id : result.rows.item(i).id,
+                title : result.rows.item(i).title,
+                created : result.rows.item(i).created
+              }
+              stars.push(star);
+            }
+            return stars;
+        });
+    },
+    addStar: function(title) {
+      return DB.query('INSERT INTO TestTable (title) VALUES ("'+title+'")')
+        .then(function(result){
+            var star = {
+              id : result.insertId,
+              title : title,
+              //created : result.rows.item(i).created
+            }
+            stars.unshift(star);
+            return result;
+        });
+    },
+    checkStar: function(title) {
+        var result = true;
+        for (var i=0; i<stars.length; i++){
+          var stared_title = stars[i].title;
+          if(stared_title == title) {
+            result = false;
+            break;
+          }
+        }
+        return result
     }
   }
 })
