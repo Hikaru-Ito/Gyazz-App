@@ -1,7 +1,8 @@
 <ion-view view-title="{{page.title}}">
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-ios-star-outline" ng-click="addStar()" ng-show="checkStar()"></button>
-    <button class="button button-icon icon ion-ios-star" ng-click="removeStar()" ng-hide="checkStar()"></button>
+
+  	<div class="button button-icon icon" ng-click="changeStar()" ng-class="(checkStar()==true) ? 'ion-ios-star-outline' : 'ion-ios-star'"></div>
+
   </ion-nav-buttons>
   	<div class="writing_message animate-show-hide" ng-show="isWriting" ng-cloak>書き込み中</div>
   <ion-content class="gyazz_page padding" on-swipe-right="swipeRight()" on-swipe-left="swipeLeft()" ng-cloak>

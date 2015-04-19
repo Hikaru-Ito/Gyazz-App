@@ -42,6 +42,9 @@ angular.module('starter.controllers', [])
     Stars.removeStar($scope.page.title).then(function(detail) {
     });
   }
+  $scope.changeStar = function() {
+    $scope.checkStar()==true ? $scope.addStar() : $scope.removeStar()
+  }
   // Gyazz記法変換
   $scope.transParagraph = function(rawData) {
     return Pages.transParagraph(rawData);
@@ -252,7 +255,7 @@ angular.module('starter.controllers', [])
     var myPopup = $ionicPopup.show({
       template: '<input type="text" ng-model="data.title">',
       title: '新規作成するページ名を入力',
-      subTitle: '空白と/は使用禁止',
+      subTitle: 'スラッシュは使用禁止',
       scope: $scope,
       buttons: [
         { text: 'キャンセル' },
@@ -271,7 +274,11 @@ angular.module('starter.controllers', [])
     });
     myPopup.then(function(res) {
       if(res !== undefined) {
-        $scope.goNewPage(res)
+        if(res.match(/\//i)){
+          console.log('error');
+        } else {
+          $scope.goNewPage(res)
+        }
       } else {
         console.log('キャンセル');
       }

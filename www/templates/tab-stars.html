@@ -3,6 +3,11 @@
     <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
     <ion-refresher on-refresh="doRefresh()" spinner="ripple"></ion-refresher>
     <ion-list can-swipe="true">
+    <div class="empty_sign" ng-if="stars.length == 0" ng-cloak>
+      <div class="icon ion-qr-scanner"></div>
+      <div class="text">データがありません</div>
+      <div class="sub_text">Gyazzページにスターをつけると<br />ここに表示されます。</div>
+    </div>
       <ion-item class="gyazz-pagelist item-icon-right" ng-repeat="star in stars" type="item-text-wrap" href="#/tab/stars/pages/{{star.title}}">
         <h2>{{star.title}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>

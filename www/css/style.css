@@ -3,6 +3,13 @@
   display: none !important;
 }
 
+.blue {
+	color:blue;
+}
+.red {
+	color:red;
+}
+
 .gyazz_link {
 	color:#BF360C;
 	text-decoration: none;
@@ -116,6 +123,38 @@ ion-refresher .spinner svg {
 .gyazz_page {
 
 }
+.empty_sign {
+	position: relative;
+	text-align: center;
+	width: 100%;
+	height: 230px;
+}
+.empty_sign .icon {
+	position: absolute;
+	top:46px;
+	width: 100%;
+	font-size: 80px;
+	color:#ccc;
+}
+.empty_sign .text {
+	position: absolute;
+	bottom:55px;
+	right: 0;
+	width: 100%;
+	font-size: 170%;
+	color:#ccc;
+	font-weight: bold;
+}
+.empty_sign .sub_text {
+	bottom:0;
+	right: 15%;
+	position: absolute;
+	width: 70%;
+	font-size: 100%;
+	color:#ccc;
+	font-weight: bold;
+	text-align: center;
+}
 .empty_tap_insert_button {
 	margin:80px auto 0 auto;
 	border-radius: 6px;
@@ -127,6 +166,11 @@ ion-refresher .spinner svg {
 	color: #fff;
 	background: #666;
 	border-bottom: 2px solid #555;
+}
+.gyazz_page img {
+	max-width: 90%;
+	height: auto;
+	margin:0 auto;
 }
 .gyazz_page .conversion_text {
 	font-size: 116%;
