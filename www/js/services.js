@@ -264,6 +264,29 @@ angular.module('starter.services', [])
 
           return title
       });
+    },
+    searchPage: function(query) {
+      var results = [];
+      return $.ajax({
+        url: GYAZZ_URL+'__search/'+GYAZZ_WIKI_NAME+'?q='+query,
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
+      }).then(function(data) {
+        var i = 0;
+        $(data).find('.tag').each(function() {
+          var result = {
+            id : i,
+            title : $(this).text()
+          }
+          results.push(result);
+          i++;
+        });
+        return results
+      });
     }
   };
 });

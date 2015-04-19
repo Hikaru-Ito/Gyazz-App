@@ -50,6 +50,22 @@ ion-tabs.tabs-color-active-gyazz .tab-item.tab-item-active, ion-tabs.tabs-color-
 	color:#FFEB3B;
 	text-shadow:0 2px 0 #DD2C00;
 }
+/*検索フォーム*/
+input.search_text_input {
+	border-radius: 4px;
+	background:#D84315;
+	font-weight: bold;
+	color:#fff;
+	padding:0 6px;
+	font-size: 20px;
+	margin-right: 4px;
+}
+input.search_text_input::-webkit-input-placeholder {
+	color: #FFB300;
+	font-weight: normal;
+	font-size: 14px;
+	padding-top:4px;
+}
 .popup-title {
 	font-weight: bold;
 	color: #333;

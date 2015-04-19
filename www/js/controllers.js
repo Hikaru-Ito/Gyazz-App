@@ -335,9 +335,32 @@ angular.module('starter.controllers', [])
       });
     });
   };
-
 })
-
+.controller('SearchCtrl', function($scope, $location, $timeout, Pages) {
+  $scope.isLoading = false;
+  $scope.showPage = function() {
+    var this_page = $location.path();
+    var tab_name = this_page.split('/');
+    $location.path('/tab/'+tab_name[2]+'/search');
+    $timeout(function() {
+      $('.search_text_input').focus();
+    }, 800);
+  }
+  $scope.searchPage = function(query) {
+    $scope.isLoading = true;
+    Pages.searchPage(query).then(function(results) {
+      $scope.results = results
+      $scope.isLoading = false;
+      $scope.$apply();
+    });
+  }
+  $scope.goNextPage = function(title) {
+    var this_page = $location.path();
+    // 現在のタブのstateを取得
+    var tab_name = this_page.split('/');
+    $location.path('/tab/'+tab_name[2]+'/pages/'+title);
+  }
+})
 .controller('AccountCtrl', function($scope) {
   $scope.settings = {
     enableFriends: true

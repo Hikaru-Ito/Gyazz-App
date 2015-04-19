@@ -57,7 +57,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-
+  .state('tab.pagelist-search', {
+    url: '/pagelist/search',
+    views: {
+      'tab-pagelist': {
+        templateUrl: 'templates/search.html',
+        controller: 'SearchCtrl'
+      }
+    }
+  })
 
   .state('tab.stars', {
       url: '/stars',
@@ -77,7 +85,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-
+  .state('tab.stars-search', {
+    url: '/stars/search',
+    views: {
+      'tab-stars': {
+        templateUrl: 'templates/search.html',
+        controller: 'SearchCtrl'
+      }
+    }
+  })
   .state('tab.random', {
       url: '/random',
       views: {
