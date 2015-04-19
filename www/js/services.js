@@ -32,7 +32,6 @@ angular.module('starter.services', [])
               data: data
           }
       }).done(function(data){
-        console.log('書き込み成功');
         return data;
       }).fail(function(data){
         console.log('書き込み失敗');
@@ -82,14 +81,14 @@ angular.module('starter.services', [])
         // }
       }).then(function(data) {
           var pageDetail = [];
-          $.each(data.data, function(i, value) {
 
+          $.each(data.data, function(i, value) {
             var text = value;// ng-blur="endEditMode()"
             var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'" ng-change="onInputText($eve)" ng-blur="endEditMode()"></textarea></label>';
             // text = '<span class="conversion_text">' + text + '</span>' + original_data;
             text = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+i+')"></span>' + original_data;
 
-            // 配列に再置換
+            // 配列に追加
             pageDetail.push(text);
           });
 
@@ -134,8 +133,10 @@ angular.module('starter.services', [])
         if(text.match(/^ +/)) {
           // 先頭から連続した空白のインデントは未実装
           text = text.replace(/^ +/g, '<span class="indent icon ion-arrow-right-b"></span>');
-        } else {
+        } else if(!text.match(/\S/g)) {
           // 大見出し（空白なし）の場合
+          text = '';
+        } else {
           text = '<span class="caption">' + text + '</span>';
         }
         return text

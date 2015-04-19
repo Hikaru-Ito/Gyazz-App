@@ -33,6 +33,34 @@ angular.module('starter.controllers', [])
       $scope.$broadcast('scroll.refreshComplete');
     });
   };
+  // 初めてのParagraph挿入
+  $scope.insertFirstParagraph = function() {
+    var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazzNew)"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data new_gyazz_data" ng-blur="endEditMode()" ng-model="gyazzNew" ng-change="onInputText($eve)" ng-init="gyazzNew=\'\'"></textarea></label>';
+    $scope.pageDetail.push(insertHtmlData);
+    $timeout(function() {
+      var _this = $('ion-view[nav-view="active"] .new_gyazz_data').closest('.htmlData');
+      $scope.isEditing = true;
+      // 現在編集中の要素のロングタップの場合はキャンセルする
+      if(!_this.hasClass('isEditing')) {
+        // 現在編集モードの他の項目があれば終了させる
+        $scope.endEditMode();
+        // 編集中のボックスにクラスをつけておく
+        _this.addClass('isEditing');
+        // テキストを一旦非表示
+        _this.find('.conversion_text').hide();
+        // フォームを表示
+        _this.find('.raw-textarea').show();
+        // 変更前内容を記憶
+        $scope.beforeEditText = _this.find('textarea').val();
+        // フォームにフォーカスを当てる
+        $timeout(function(){
+             _this.find('textarea').focus();
+        }, 0);
+      }
+
+    }, 10);
+
+  }
   // 編集Modal表示
   $scope.rawData = 'TestData[[Hikaru]]'
    $ionicModal.fromTemplateUrl('templates/modal-editpage.html', {
@@ -93,14 +121,14 @@ angular.module('starter.controllers', [])
     if(_this.currentTarget.scrollHeight > _this.currentTarget.offsetHeight){
         $(_this.currentTarget).height(_this.currentTarget.scrollHeight);
     }else{
-        var lineHeight = Number($(_this.currentTarget).css("lineHeight").split("px")[0]);
-        while (true){
-            $(_this.currentTarget).height($(_this.currentTarget).height() - lineHeight);
-            if(_this.currentTarget.scrollHeight > _this.currentTarget.offsetHeight){
-                $(_this.currentTarget).height(_this.currentTarget.scrollHeight);
-                break;
-            }
+      var lineHeight = Number($(_this.currentTarget).css("lineHeight").split("px")[0]);
+      while (true){
+        $(_this.currentTarget).height($(_this.currentTarget).height() - lineHeight);
+        if(_this.currentTarget.scrollHeight > _this.currentTarget.offsetHeight){
+            $(_this.currentTarget).height(_this.currentTarget.scrollHeight);
+            break;
         }
+      }
     }
   }
   // ページを編集モードに切り替え
@@ -138,7 +166,7 @@ angular.module('starter.controllers', [])
         $scope.isWriting = true;
         // ページの内容を全取得して連結させる
         var page_all_data = '';
-        $('.raw-textarea .original_data').each(function(i) {
+        $('ion-view[nav-view="active"] .raw-textarea .original_data').each(function(i) {
           var pageDetailNumber = i;
           var text_data = $(this).val();
           // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
@@ -157,7 +185,9 @@ angular.module('starter.controllers', [])
           page_all_data += '\n';
         });
         Pages.writePage($scope.page.title, page_all_data).then(function(data) {
-          $scope.isWriting = false;
+          $timeout(function() {
+            $scope.isWriting = false;
+          }, 100);
         });
       } else {
         $scope.isWriting = false;
@@ -194,12 +224,11 @@ angular.module('starter.controllers', [])
 })
 .controller('NewpageCtrl',function($scope, $ionicPopup, $location, $timeout) {
   $scope.goNewPage = function(title) {
+    //console.log($location.path());
     $location.path('/tab/pagelist/pages/'+title);
   }
   $scope.showPopup = function() {
-    //alert('hey');
     $scope.data = {}
-    // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
       template: '<input type="text" ng-model="data.title">',
       title: '新規作成するページ名を入力',
@@ -209,7 +238,7 @@ angular.module('starter.controllers', [])
         { text: 'キャンセル' },
         {
           text: '<b>作成</b>',
-          type: 'button-positive',
+          type: 'button-assertive',
           onTap: function(e) {
             if (!$scope.data.title) {
               e.preventDefault();

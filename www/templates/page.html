@@ -2,15 +2,14 @@
   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-ios-star-outline" on-hold="insertGyazzMark('[');"></button>
   </ion-nav-buttons>
-  	<div class="writing_message" ng-show="isWriting">書き込み中</div>
-  <ion-content class="gyazz_page padding" on-swipe-right="swipeRight()" on-swipe-left="swipeLeft()">
-    <ion-refresher on-refresh="doRefresh()" spinner="ripple"></ion-refresher>
-	<!-- <div class="editingPadding" ng-show="isEditing"></div> -->
-  	<div class="loading" ng-show="isLoading">
+  	<div class="writing_message animate-show-hide" ng-show="isWriting" ng-cloak>書き込み中</div>
+  <ion-content class="gyazz_page padding" on-swipe-right="swipeRight()" on-swipe-left="swipeLeft()" ng-cloak>
+    <ion-refresher on-refresh="doRefresh()" spinner="ripple" ng-cloak></ion-refresher>
+  	<div class="loading" ng-show="isLoading" ng-cloak>
 		<ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner>
   	</div>
-    <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event);">
+    <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event);" ng-cloak>
+    	<div class="empty_tap_insert_button" ng-if="pageDetail.length == 0" on-hold="insertFirstParagraph()" ng-cloak>ロングタップで入力</div>
     </p>
-	<!-- <div class="editingPadding" ng-show="isEditing"></div> -->
   </ion-content>
 </ion-view>
