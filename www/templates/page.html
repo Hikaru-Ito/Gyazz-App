@@ -1,7 +1,7 @@
 <ion-view view-title="{{page.title}}">
   <ion-nav-buttons side="right">
 
-  	<div class="button button-icon icon" ng-click="changeStar()" ng-class="(checkStar()==true) ? 'ion-ios-star-outline' : 'ion-ios-star'"></div>
+  	<div class="button-icon icon" ng-click="changeStar()" ng-class="(checkStar()==true) ? 'ion-ios-star-outline' : 'star-on ion-ios-star animated bounceIn'"></div>
 
   </ion-nav-buttons>
   	<div class="writing_message animate-show-hide" ng-show="isWriting" ng-cloak>書き込み中</div>
@@ -15,4 +15,5 @@
     	<div class="empty_tap_insert_button" ng-if="pageDetail.length == 0" on-hold="insertFirstParagraph()" ng-cloak>ロングタップで入力</div>
     </p>
   </ion-content>
+  <div class="pop_icon_stared animated bounce" ng-class="(starAni==true) ? 'show animated bounce' : 'hide'" ng-cloak>New!</div>
 </ion-view>

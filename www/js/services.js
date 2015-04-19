@@ -124,6 +124,7 @@ angular.module('starter.services', [])
 })
 .factory('Pages', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
 
+
   // Gyazzのページ一覧を取得する
   return {
     writePage: function(title, data) {
@@ -246,6 +247,23 @@ angular.module('starter.services', [])
           text = '<span class="caption">' + text + '</span>';
         }
         return text
+    },
+    getRandomPageDetail: function() {
+      return $.ajax({
+        url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__random',
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
+      }).then(function(data) {
+        var title = $(data).find('#title').text();
+            title = title.replace(/[\n\r]/g,"")
+            title = title.replace(/^\s+|\s+$/g, "");
+
+          return title
+      });
     }
   };
 });

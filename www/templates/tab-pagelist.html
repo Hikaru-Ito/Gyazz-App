@@ -1,17 +1,15 @@
 <ion-view view-title="PageList">
   <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-ios-search" ng-click="showPopup()" ng-controller="NewpageCtrl"></button>
     <button class="button button-icon icon ion-ios-compose-outline" ng-click="showPopup()" ng-controller="NewpageCtrl"></button>
   </ion-nav-buttons>
   <ion-content>
     <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
     <ion-refresher on-refresh="doRefresh()" spinner="ripple"></ion-refresher>
-    <ion-list can-swipe="true">
+    <ion-list can-swipe="false">
       <ion-item class="gyazz-pagelist item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.title}}">
         <h2>{{page.title}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>
-        <ion-option-button class="button-energized" ng-click="show()">
-            <i class="icon ion-ios-star"></i>
-        </ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

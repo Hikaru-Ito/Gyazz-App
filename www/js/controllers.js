@@ -7,6 +7,8 @@ angular.module('starter.controllers', [])
   $scope.isWriting = false;
   $scope.beforeEditText = null;
   $scope.isEditing = false;
+  $scope.starAni = false;
+
   // ページ本文を読み込む
   Pages.getPageDetail($scope.page.title).then(function(detail) {
   	$scope.pageDetail = detail
@@ -37,6 +39,10 @@ angular.module('starter.controllers', [])
   $scope.addStar = function() {
     Stars.addStar($scope.page.title).then(function(detail) {
     });
+      $scope.starAni = true;
+    $timeout(function() {
+      $scope.starAni = false;
+    }, 1600);
   }
   $scope.removeStar = function() {
     Stars.removeStar($scope.page.title).then(function(detail) {
@@ -189,7 +195,7 @@ angular.module('starter.controllers', [])
         $scope.isWriting = true;
         // ページの内容を全取得して連結させる
         var page_all_data = '';
-        $('ion-view[nav-view="active"] .raw-textarea .original_data').each(function(i) {
+        $('ion-nav-view[nav-view="active"] .raw-textarea .original_data').each(function(i) {
           var pageDetailNumber = i;
           var text_data = $(this).val();
           // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
@@ -247,8 +253,10 @@ angular.module('starter.controllers', [])
 })
 .controller('NewpageCtrl',function($scope, $ionicPopup, $location, $timeout) {
   $scope.goNewPage = function(title) {
-    //console.log($location.path());
-    $location.path('/tab/pagelist/pages/'+title);
+    var this_page = $location.path();
+    // 現在のタブのstateを取得
+    var tab_name = this_page.split('/');
+    $location.path('/tab/'+tab_name[2]+'/pages/'+title);
   }
   $scope.showPopup = function() {
     $scope.data = {}
@@ -301,7 +309,34 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('RandomCtrl', function($scope, $http) {})
+.controller('RandomCtrl', function($scope, $http, $controller, Pages) {
+  // コントローラを継承
+  $controller('PageCtrl', {$scope: $scope});
+
+  // デフォルトタイトル
+  $scope.page.title = 'Loading...';
+
+  // ランダムページ取得
+  Pages.getRandomPageDetail().then(function(detail) {
+    $scope.page.title = detail
+    Pages.getPageDetail($scope.page.title).then(function(detail) {
+      $scope.pageDetail = detail
+      $scope.isLoading = false;
+    });
+  });
+  //
+  $scope.doRefresh = function() {
+    Pages.getRandomPageDetail().then(function(detail) {
+      $scope.page.title = detail
+      console.log($scope.page.title);
+      Pages.getPageDetail($scope.page.title).then(function(detail) {
+        $scope.pageDetail = detail
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    });
+  };
+
+})
 
 .controller('AccountCtrl', function($scope) {
   $scope.settings = {
