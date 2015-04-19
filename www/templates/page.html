@@ -8,7 +8,7 @@
   	<div class="loading" ng-show="isLoading" ng-cloak>
 		<ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner>
   	</div>
-    <p class="htmlData" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event);" ng-cloak>
+    <p class="htmlData paragraphWrapper" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event);" ng-cloak>
     	<div class="empty_tap_insert_button" ng-if="pageDetail.length == 0" on-hold="insertFirstParagraph()" ng-cloak>ロングタップで入力</div>
     </p>
   </ion-content>

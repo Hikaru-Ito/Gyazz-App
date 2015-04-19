@@ -69,7 +69,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
   .state('tab.stars-page', {
-    url: '/stars/pages/:pageId',
+    url: '/stars/pages/:pageTitle',
     views: {
       'tab-stars': {
         templateUrl: 'templates/page.html',

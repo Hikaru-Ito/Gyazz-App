@@ -22,6 +22,10 @@ angular.module('starter.controllers', [])
     $cordovaInAppBrowser.open(url, '_blank', options)
       .then(function(event) {}).catch(function(event) {});
   }
+  // ページ遷移
+  $scope.goNextPage = function() {
+    alert('hey');
+  }
   // Gyazz記法変換
   $scope.transParagraph = function(rawData) {
     return Pages.transParagraph(rawData);
@@ -38,7 +42,7 @@ angular.module('starter.controllers', [])
     var insertHtmlData = '<span class="conversion_text" ng-bind-html="transParagraph(gyazzNew)"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data new_gyazz_data" ng-blur="endEditMode()" ng-model="gyazzNew" ng-change="onInputText($eve)" ng-init="gyazzNew=\'\'"></textarea></label>';
     $scope.pageDetail.push(insertHtmlData);
     $timeout(function() {
-      var _this = $('ion-view[nav-view="active"] .new_gyazz_data').closest('.htmlData');
+      var _this = $('ion-view[nav-view="active"] .new_gyazz_data').closest('.paragraphWrapper');
       $scope.isEditing = true;
       // 現在編集中の要素のロングタップの場合はキャンセルする
       if(!_this.hasClass('isEditing')) {
@@ -193,7 +197,7 @@ angular.module('starter.controllers', [])
         $scope.isWriting = false;
       }
     }
-    var texts_area = $('.htmlData');
+    var texts_area = $('.paragraphWrapper');
     // テキストを一旦非表示
     texts_area.find('.conversion_text').show();
     // フォームを表示
@@ -258,8 +262,23 @@ angular.module('starter.controllers', [])
     });
    };
 })
-.controller('StarsCtrl', function($scope, Pages) {
-	$scope.pages = Pages.all();
+.controller('StarsCtrl', function($scope, Stars) {
+  $scope.isLoading = true;
+  // スター覧を読み込む
+  // Stars.getStars().then(function(stars) {
+  //   $scope.stars = stars;
+  //   $scope.isLoading = false;
+  //   });
+  $scope.stars = Stars.getStars();
+  $scope.isLoading = false;
+
+  // PullToRefresh
+  // $scope.doRefresh = function() {
+  //   Stars.getStars().then(function(stars) {
+  //     $scope.stars = stars;
+  //     $scope.$broadcast('scroll.refreshComplete');
+  //   });
+  // };
 })
 
 .controller('RandomCtrl', function($scope, $http) {})

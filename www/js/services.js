@@ -14,12 +14,27 @@ angular.module('starter.services', [])
       }
     }
   })
-
+.factory('Stars', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
+  return {
+    getStars: function() {
+      var stars = [
+        {
+          id:1,
+          title:'テストスター',
+          created:'2015-04-22'
+        },
+        {
+          id:2,
+          title:'テストスター2',
+          created:'2015-04-23'
+        }];
+      return stars
+    }
+  }
+})
 .factory('Pages', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
 
   // Gyazzのページ一覧を取得する
-
-
   return {
     writePage: function(title, data) {
       return $.ajax({
@@ -86,7 +101,7 @@ angular.module('starter.services', [])
             var text = value;// ng-blur="endEditMode()"
             var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'" ng-change="onInputText($eve)" ng-blur="endEditMode()"></textarea></label>';
             // text = '<span class="conversion_text">' + text + '</span>' + original_data;
-            text = '<span class="conversion_text" ng-bind-html="transParagraph(gyazz'+i+')"></span>' + original_data;
+            text = '<span class="conversion_text htmlData" content="transParagraph(gyazz'+i+')"></span>' + original_data;
 
             // 配列に追加
             pageDetail.push(text);
@@ -126,7 +141,7 @@ angular.module('starter.services', [])
               }
             } else {
               // 普通の文字列の場合は、Gyazzページヘのリンクにする
-              text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1" class="gyazz_link">$1</a>');
+              text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1" class="gyazz_link" ng-click="goNextPage()">$1</a>');
             }
         }
         // 先頭の空白をインデントに変換する

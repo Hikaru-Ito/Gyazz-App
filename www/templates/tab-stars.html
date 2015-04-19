@@ -1,10 +1,12 @@
 <ion-view view-title="MyStars">
   <ion-content class="padding">
+    <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
+    <ion-refresher on-refresh="doRefresh()" spinner="ripple"></ion-refresher>
     <ion-list can-swipe="true">
-      <ion-item class="item-remove-animate item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/stars/pages/{{page.id}}">
-        <h2>{{page.title}}</h2>
+      <ion-item class="gyazz-pagelist item-icon-right" ng-repeat="star in stars" type="item-text-wrap" href="#/tab/stars/pages/{{star.title}}">
+        <h2>{{star.title}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>
-        <ion-option-button class="button-energized" ng-click="share(item)">
+        <ion-option-button class="button-energized" ng-click="show()">
             <i class="icon ion-ios-star"></i>
         </ion-option-button>
       </ion-item>
