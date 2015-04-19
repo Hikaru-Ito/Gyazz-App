@@ -141,7 +141,8 @@ angular.module('starter.services', [])
               }
             } else {
               // 普通の文字列の場合は、Gyazzページヘのリンクにする
-              text = text.replace(/\[\[(.*?)\]\]/g, '<a href="#/tab/pagelist/pages/$1" class="gyazz_link" ng-click="goNextPage()">$1</a>');
+              //href="#/tab/pagelist/pages/$1"
+              text = text.replace(/\[\[(.*?)\]\]/g, '<span class="gyazz_link" ng-click="goNextPage(\'$1\')">$1</span>');
             }
         }
         // 先頭の空白をインデントに変換する
