@@ -87,9 +87,7 @@ angular.module('starter.controllers', [])
              _this.find('textarea').focus();
         }, 0);
       }
-
     }, 10);
-
   }
   // 編集Modal表示
   $scope.rawData = 'TestData[[Hikaru]]'
@@ -109,6 +107,7 @@ angular.module('starter.controllers', [])
   $scope.swipeRight = function() {
     if($scope.isEditing) {
       $scope.insertGyazzMark('[');
+      // コメントを解除すれば、スワイプでカーソル移動ができるようになる
       // var target_area = $(':focus');
       //     target_area = target_area.get(0);
       // var o = target_area;
@@ -121,6 +120,7 @@ angular.module('starter.controllers', [])
   $scope.swipeLeft = function() {
     if($scope.isEditing) {
       $scope.insertGyazzMark(']');
+      // コメントを解除すれば、スワイプでカーソル移動ができるようになる
       // var target_area = $(':focus');
       //     target_area = target_area.get(0);
       // var o = target_area;
@@ -254,14 +254,6 @@ angular.module('starter.controllers', [])
   };
 })
 .controller('NewpageCtrl',function($scope, $ionicPopup, $location, $timeout) {
-  // $scope.testFunc = function() {
-  //   var this_page = $location.path();
-  //   var tab_name = this_page.split('/');
-  //   var title = 'Hikaru/test'
-  //       title = title.replace(/[\n\r]/g,"%2F")
-  //   var title = 'Hikaru%2Ftest'
-  //   $location.path('/tab/'+tab_name[2]+'/pages/'+title);
-  // }
   $scope.goNewPage = function(title) {
     var this_page = $location.path();
     // 現在のタブのstateを取得
@@ -323,19 +315,6 @@ angular.module('starter.controllers', [])
 .controller('RandomCtrl', function($scope, $http, $controller, Pages) {
   // コントローラを継承
   $controller('PageCtrl', {$scope: $scope});
-  var onShake = function () {
-    Pages.getRandomPageDetail().then(function(detail) {
-      $scope.page.title = detail
-      Pages.getPageDetail($scope.page.title).then(function(detail) {
-        $scope.pageDetail = detail
-        $scope.isLoading = false;
-        $scope.$apply();
-      });
-    });
-  };
-
-  // シェイクでページ遷移
-  shake.startWatch(onShake, 30);
 
   // デフォルトタイトル
   $scope.page.title = 'Loading...';
@@ -347,7 +326,6 @@ angular.module('starter.controllers', [])
       $scope.pageDetail = detail
       $scope.isLoading = false;
       $scope.$apply();
-
     });
   });
   //
@@ -388,9 +366,10 @@ angular.module('starter.controllers', [])
   }
 })
 .controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+  $scope.logout = function() {
+      localStorage.removeItem('logined');
+      alert('ログアウトしました');
+  }
 })
 .controller('LoginCtrl', function($scope, $ionicModal, $location) {
     // モーダル定義
@@ -404,9 +383,11 @@ angular.module('starter.controllers', [])
     $scope.errorMessage = false;
     $scope.signIn = function(user) {
       // バリデーションをする
+      // この実装はまずいのであとで変更
       if(user.username == "pitecan" && user.pass == "masu1lab") {
         $location.path('/tab/pagelist');
-        $scope.closeModal();
+        localStorage.setItem('logined', 'logined');
+        $scope.modal.hide();
       } else {
         $scope.errorMessage = true;
       }
