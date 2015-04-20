@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $location) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,6 +19,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
+
+    // ログインを確認する
+    // localStorageを使用する
+    //$location.path('/login');
+
   });
 })
 
@@ -121,6 +126,20 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: 'AccountCtrl'
       }
     }
+  })
+  .state('tab.account-page', {
+    url: '/account/pages/:pageTitle',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/page.html',
+        controller: 'PageCtrl'
+      }
+    }
+  })
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/modal-editpage.html',
+    controller: 'LoginCtrl'
   });
 
   // if none of the above states are matched, use this as the fallback

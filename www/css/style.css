@@ -2,7 +2,18 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
-
+h1.title {
+	font-weight: bold !important;
+	color:#555;
+}
+.login-button {
+	font-weight: bold;
+}
+input.username_input,
+input.pass_input {
+	font-weight: bold;
+	font-size: 20px;
+}
 .gyazz_link {
 	color:#BF360C;
 	text-decoration: none;

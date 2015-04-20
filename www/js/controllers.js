@@ -312,6 +312,19 @@ angular.module('starter.controllers', [])
 .controller('RandomCtrl', function($scope, $http, $controller, Pages) {
   // コントローラを継承
   $controller('PageCtrl', {$scope: $scope});
+  var onShake = function () {
+    Pages.getRandomPageDetail().then(function(detail) {
+      $scope.page.title = detail
+      Pages.getPageDetail($scope.page.title).then(function(detail) {
+        $scope.pageDetail = detail
+        $scope.isLoading = false;
+        $scope.$apply();
+      });
+    });
+  };
+
+  // シェイクでページ遷移
+  shake.startWatch(onShake, 30);
 
   // デフォルトタイトル
   $scope.page.title = 'Loading...';
@@ -322,6 +335,8 @@ angular.module('starter.controllers', [])
     Pages.getPageDetail($scope.page.title).then(function(detail) {
       $scope.pageDetail = detail
       $scope.isLoading = false;
+      $scope.$apply();
+
     });
   });
   //
@@ -365,4 +380,24 @@ angular.module('starter.controllers', [])
   $scope.settings = {
     enableFriends: true
   };
+})
+.controller('LoginCtrl', function($scope, $ionicModal, $location) {
+    // モーダル定義
+   $ionicModal.fromTemplateUrl('templates/modal-editpage.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+      $scope.modal.show();
+    });
+    $scope.errorMessage = false;
+    $scope.signIn = function(user) {
+      // バリデーションをする
+      if(user.username == "pitecan" && user.pass == "masu1lab") {
+        $location.path('/tab/pagelist');
+        $scope.closeModal();
+      } else {
+        $scope.errorMessage = true;
+      }
+    }
 });

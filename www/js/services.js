@@ -43,6 +43,29 @@ angular.module('starter.services', [])
     };
     return self;
 })
+.factory('Login', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
+  return {
+    // checkLogin: function(username, pass) {
+    //   var encode = username+':'+pass;
+    //   return $.ajax({
+    //       type: "GET",
+    //       url: GYAZZ_URL + '__write',
+    //       xhrFields: {
+    //         withCredentials: true
+    //       },
+    //       headers: {
+    //         "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+    //       }
+    //       }).done(function(data){
+    //         console.log('ログイン成功');
+    //         return true;
+    //       }).fail(function(data){
+    //         console.log('ログイン失敗');
+    //         return false;
+    //   });
+    //}
+  }
+})
 .factory('Stars', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME, DB) {
 
   var stars = [];
@@ -137,6 +160,12 @@ angular.module('starter.services', [])
               orig_md5: 'ec0c02c2884ec60d59cb38ec711e34f4',
               data: data
           }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).done(function(data){
         return data;
       }).fail(function(data){
