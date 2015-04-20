@@ -13,6 +13,7 @@ angular.module('starter.controllers', [])
   Pages.getPageDetail($scope.page.title).then(function(detail) {
   	$scope.pageDetail = detail
     $scope.isLoading = false;
+    $scope.$apply();
   });
   // InAppBrowser
   $scope.openWebPage = function(url) {
@@ -242,6 +243,7 @@ angular.module('starter.controllers', [])
 	Pages.getPages().then(function(pages) {
         $scope.pages = pages;
         $scope.isLoading = false;
+        $scope.$apply();
     });
   // PullToRefresh
   $scope.doRefresh = function() {
@@ -252,6 +254,14 @@ angular.module('starter.controllers', [])
   };
 })
 .controller('NewpageCtrl',function($scope, $ionicPopup, $location, $timeout) {
+  // $scope.testFunc = function() {
+  //   var this_page = $location.path();
+  //   var tab_name = this_page.split('/');
+  //   var title = 'Hikaru/test'
+  //       title = title.replace(/[\n\r]/g,"%2F")
+  //   var title = 'Hikaru%2Ftest'
+  //   $location.path('/tab/'+tab_name[2]+'/pages/'+title);
+  // }
   $scope.goNewPage = function(title) {
     var this_page = $location.path();
     // 現在のタブのstateを取得
@@ -299,6 +309,7 @@ angular.module('starter.controllers', [])
   Stars.getStars().then(function(stars) {
     $scope.stars = stars;
     $scope.isLoading = false;
+    $scope.$apply();
     });
   //PullToRefresh
   $scope.doRefresh = function() {
