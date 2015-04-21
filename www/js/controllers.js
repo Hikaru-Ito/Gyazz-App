@@ -133,11 +133,8 @@ angular.module('starter.controllers', [])
   }
   // 記号挿入
   $scope.insertGyazzMark = function(mark) {
-    // console.log(mark);
-    // // フォーカスされているテキストエリアを指定
     var target_area = $(':focus');
         target_area = target_area.get(0);
-    // //target_area.focus();
     var o = target_area;
     var s = o.value;
     var p = o.selectionStart;
@@ -145,6 +142,7 @@ angular.module('starter.controllers', [])
     o.value = s.substr(0, p) + mark + s.substr(p);
     o.setSelectionRange(np, np);
     o.focus();
+    $scope.$apply();
   }
   // テキストエリア自動可変
   $scope.onInputText = function(evt) {

@@ -1,8 +1,9 @@
 <ion-view view-title="Gyazzページ検索">
 <ion-nav-title></ion-nav-title>
   <ion-nav-buttons side="right">
-    <input type="text" class="search_text_input" placeholder="検索ワードを入力" ng-model="query">
-    <button class="button button-stable search_button" ng-click="searchPage(query)">検索</button>
+	<form name="signinForm" novalidate="" ng-submit="searchPage(query)">
+    	<input type="text" class="search_text_input" placeholder="検索ワードを入力" ng-model="query">
+	</form>
   </ion-nav-buttons>
   <ion-content>
 	  <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
