@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaInAppBrowser, $ionicModal, $timeout, $location, Pages, Stars) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $ionicModal, $timeout, $location, Pages, Stars) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
@@ -39,8 +39,9 @@ angular.module('starter.controllers', [])
   // スターに追加
   $scope.addStar = function() {
     Stars.addStar($scope.page.title).then(function(detail) {
+      $cordovaVibration.vibrate(400);
     });
-      $scope.starAni = true;
+    $scope.starAni = true;
     $timeout(function() {
       $scope.starAni = false;
     }, 1600);
