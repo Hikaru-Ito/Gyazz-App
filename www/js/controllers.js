@@ -238,10 +238,13 @@ angular.module('starter.controllers', [])
 
 .controller('PagelistCtrl', function($scope, $timeout, $ionicPopup, $ionicLoading, Pages) {
   $scope.isLoading = true;
+  $scope.pages = [];
+  $scope.noMoreItemsAvailable = true;
 	// ページ一覧を読み込む
 	Pages.getPages().then(function(pages) {
         $scope.pages = pages;
         $scope.isLoading = false;
+        $scope.noMoreItemsAvailable = false;
         $scope.$apply();
     });
   // PullToRefresh
@@ -251,6 +254,12 @@ angular.module('starter.controllers', [])
       $scope.$broadcast('scroll.refreshComplete');
     });
   };
+  // Infinite Scroll
+  $scope.loadMoreData = function() {
+    var id = $scope.pages.length;
+    $scope.pages = $scope.pages.concat(Pages.getMorePages(id));
+    $scope.$broadcast('scroll.refreshComplete');
+  }
 })
 .controller('NewpageCtrl',function($scope, $ionicPopup, $location, $timeout) {
   $scope.goNewPage = function(title) {

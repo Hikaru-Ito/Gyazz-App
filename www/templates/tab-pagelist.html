@@ -12,5 +12,7 @@
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
+    <div class="button" ng-click="loadMoreData()">More</div>
+    <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMoreData()" distance="10%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>
