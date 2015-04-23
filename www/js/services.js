@@ -311,9 +311,10 @@ angular.module('starter.services', [])
       });
     },
     searchPage: function(query) {
+      results = [];
       return $.ajax({
-        url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
-        //url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
+        //url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
+        url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
 
         // xhrFields: {
         //   withCredentials: true
