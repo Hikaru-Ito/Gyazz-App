@@ -238,12 +238,19 @@ angular.module('starter.controllers', [])
 
 .controller('PagelistCtrl', function($scope, $timeout, $ionicPopup, $ionicLoading, Pages) {
   $scope.isLoading = true;
-	// ページ一覧を読み込む
-	Pages.getPages().then(function(pages) {
-        $scope.pages = pages;
-        $scope.isLoading = false;
-        $scope.$apply();
-    });
+  $scope.pages = [];
+  $scope.noMoreItemsAvailable = true;
+  // // ページ一覧を読み込む
+  Pages.getPages().then(function(pages) {
+    $scope.pages = pages;
+    $scope.isLoading = false;
+    $scope.noMoreItemsAvailable = false;
+    $scope.$apply();
+  });
+  $scope.loadMore = function() {
+    $scope.pages = $scope.pages.concat(Pages.getMorePages($scope.pages.length));
+    $scope.$broadcast('scroll.infiniteScrollComplete');
+  };
   // PullToRefresh
   $scope.doRefresh = function() {
     Pages.getPages().then(function(pages) {
@@ -340,7 +347,25 @@ angular.module('starter.controllers', [])
   };
 })
 .controller('SearchCtrl', function($scope, $location, $timeout, Pages) {
+
   $scope.isLoading = false;
+  $scope.noMoreItemsAvailable = true;
+  $scope.results = [];
+  $scope.noData = false;
+  $scope.searchPage = function(query) {
+    $scope.results = [];
+    $scope.isLoading = true;
+    $scope.noData = false;
+    Pages.searchPage(query).then(function(results) {
+      if(results.length == 0) {
+        $scope.noData = true;
+      }
+      $scope.results = results;
+      $scope.isLoading = false;
+      $scope.noMoreItemsAvailable = false;
+      $scope.$apply();
+    });
+  };
   $scope.showPage = function() {
     var this_page = $location.path();
     var tab_name = this_page.split('/');
@@ -348,23 +373,20 @@ angular.module('starter.controllers', [])
     $timeout(function() {
       $('.search_text_input').focus();
     }, 800);
-  }
-  $scope.searchPage = function(query) {
-    $scope.isLoading = true;
-    Pages.searchPage(query).then(function(results) {
-      $scope.results = results
-      $scope.isLoading = false;
-      $scope.$apply();
-    });
-  }
+  };
   $scope.goNextPage = function(title) {
     var this_page = $location.path();
     // 現在のタブのstateを取得
     var tab_name = this_page.split('/');
     $location.path('/tab/'+tab_name[2]+'/pages/'+title);
-  }
+  };
+  $scope.loadMore = function() {
+    $scope.results = $scope.results.concat(Pages.getMoreSearch($scope.results.length));
+    $scope.$broadcast('scroll.infiniteScrollComplete');
+  };
+
 })
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $timeout, Pages) {
   $scope.logout = function() {
       localStorage.removeItem('logined');
       alert('ログアウトしました');

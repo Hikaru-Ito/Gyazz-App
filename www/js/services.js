@@ -1,7 +1,9 @@
 angular.module('starter.services', [])
 
-.constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
-.constant('GYAZZ_WIKI_NAME', '増井研')
+// .constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
+// .constant('GYAZZ_WIKI_NAME', '増井研')
+.constant('GYAZZ_URL', 'http://gyazz.com/')
+.constant('GYAZZ_WIKI_NAME', 'UIPedia')
 
 .directive('htmlData', function($compile, $parse) {
     return {
@@ -147,6 +149,10 @@ angular.module('starter.services', [])
 })
 .factory('Pages', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME) {
 
+  // ページリストの配列を定義
+  var pages = [];
+  var results = [];
+
 
   // Gyazzのページ一覧を取得する
   return {
@@ -160,12 +166,12 @@ angular.module('starter.services', [])
               //orig_md5: 'ec0c02c2884ec60d59cb38ec711e34f4',
               data: data
           },
-          xhrFields: {
-            withCredentials: true
-          },
-          headers: {
-            "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-          }
+          // xhrFields: {
+          //   withCredentials: true
+          // },
+          // headers: {
+          //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+          // }
       }).done(function(data){
         return data;
       }).fail(function(data){
@@ -176,28 +182,38 @@ angular.module('starter.services', [])
     getPages: function() {
       return $.ajax({
         url: GYAZZ_URL + GYAZZ_WIKI_NAME,
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
           var i = 0;
-          var pages = [];
+          var first_pages = [];
           $(data).find('.tag').each(function() {
             var gyazz_page = {
               id : i,
               title : $(this).text()
             }
-            pages.push(gyazz_page);
-            if(i == 100) {
-              return false;
+            if(i < 25) {
+              first_pages.push(gyazz_page);
             }
+            pages.push(gyazz_page);
             i++;
           });
-          return pages
+          return first_pages
         });
+    },
+    getMorePages: function(id) {
+      var more_pages = [];
+          id = Number(id);
+      for (var i=0; i<pages.length; i++){
+        if(i>id && i<(id+25)) {
+          more_pages.push(pages[i]);
+        }
+      }
+      return more_pages
     },
     getPage: function(pageTitle) {
       var page = {
@@ -208,12 +224,12 @@ angular.module('starter.services', [])
     getPageDetail: function(pageTitle) {
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/'+pageTitle+'/json',
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
           var pageDetail = [];
 
@@ -280,12 +296,12 @@ angular.module('starter.services', [])
     getRandomPageDetail: function() {
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__random',
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
         var title = $(data).find('#title').text();
             title = title.replace(/[\n\r]/g,"")
@@ -295,16 +311,19 @@ angular.module('starter.services', [])
       });
     },
     searchPage: function(query) {
-      var results = [];
+      results = [];
       return $.ajax({
-        url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        //url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
+        url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
+
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
+        var first_results = [];
         var i = 0;
         $(data).find('.tag').each(function() {
           var result = {
@@ -312,13 +331,23 @@ angular.module('starter.services', [])
             title : $(this).text()
           }
           results.push(result);
-          if(i == 100) {
-            return false;
+          if(i < 25) {
+            first_results.push(result);
           }
           i++;
         });
-        return results
+        return first_results
       });
+    },
+    getMoreSearch: function(id) {
+      var more_results = [];
+          id = Number(id);
+      for (var i=0; i<results.length; i++){
+        if(i>id && i<(id+25)) {
+          more_results.push(results[i]);
+        }
+      }
+      return more_results
     }
   };
 });
