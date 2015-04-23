@@ -8,6 +8,10 @@
   <ion-content>
 	<div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
 	<ion-list can-swipe="false">
+    <div class="empty_sign" ng-show="noData" ng-cloak>
+      <div class="icon ion-qr-scanner"></div>
+      <div class="text">データがありません</div>
+    </div>
 	  <ion-item class="gyazz-pagelist item-icon-right" ng-repeat="result in results" type="item-text-wrap" ng-click="goNextPage(result.title)">
 	    <h2>{{result.title}}</h2>
 	    <i class="icon ion-chevron-right icon-accessory"></i>

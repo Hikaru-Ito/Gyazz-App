@@ -351,10 +351,15 @@ angular.module('starter.controllers', [])
   $scope.isLoading = false;
   $scope.noMoreItemsAvailable = true;
   $scope.results = [];
+  $scope.noData = false;
   $scope.searchPage = function(query) {
     $scope.results = [];
     $scope.isLoading = true;
+    $scope.noData = false;
     Pages.searchPage(query).then(function(results) {
+      if(results.length == 0) {
+        $scope.noData = true;
+      }
       $scope.results = results;
       $scope.isLoading = false;
       $scope.noMoreItemsAvailable = false;
