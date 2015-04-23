@@ -24,9 +24,8 @@ input.pass_input {
 }
 .gyazz_blank_link {
 	color:#BF360C;
-	text-decoration: none;
+	text-decoration: underline;
 	font-size: 105%;
-	border:1px dashed #03A9F4;
 	border-radius: 4px;
 	padding:4px 6px;
 }
@@ -257,14 +256,40 @@ ion-refresher .spinner svg {
 	color:#333;
 	line-height: 190%;
 }
-.gyazz_page .conversion_text .indent {
-	padding:0 6px 0 12px;
-	font-weight: bold;
-	color:#FF8F00;
-}
-.gyazz_page .conversion_text .caption {
-	border-left: 5px solid #EF6C00;
+.gyazz_page .conversion_text .indent0 {
+	border-left: 4px solid #EF6C00;
 	padding: 4px 0px 4px 8px;
+	margin-top:15px;
+}
+.gyazz_page .conversion_text .indent1,
+.gyazz_page .conversion_text .indent2,
+.gyazz_page .conversion_text .indent3 {
+	position: relative;
+	font-size: 96%;
+}
+.gyazz_page .conversion_text .indent1 {
+	margin-left: 22px;
+}
+.gyazz_page .conversion_text .indent1:before,
+.gyazz_page .conversion_text .indent2:before,
+.gyazz_page .conversion_text .indent3:before {
+	position: absolute;
+	top:10px;
+	left:-14px;
+	content:'';
+	display: block;
+	width: 0;
+	height: 0;
+	border: 7px solid transparent;
+	border-left: 7px solid #FBC02D;
+}
+.gyazz_page .conversion_text .indent1:after {
+	content:'';
+	display: block;
+	clear:both;
+}
+.gyazz_page .conversion_text .indent2 {
+	padding:0 6px 0 12px;
 }
 textarea.original_data {
 	font-size: 130%;

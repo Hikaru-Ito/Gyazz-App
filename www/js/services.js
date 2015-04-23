@@ -1,9 +1,9 @@
 angular.module('starter.services', [])
 
-.constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
-.constant('GYAZZ_WIKI_NAME', '増井研')
-// .constant('GYAZZ_URL', 'http://gyazz.com/')
-// .constant('GYAZZ_WIKI_NAME', 'UIPedia')
+// .constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
+// .constant('GYAZZ_WIKI_NAME', '増井研')
+.constant('GYAZZ_URL', 'http://gyazz.com/')
+.constant('GYAZZ_WIKI_NAME', 'Hikaru')
 
 .directive('htmlData', function($compile, $parse) {
     return {
@@ -152,7 +152,9 @@ angular.module('starter.services', [])
   // ページリストの配列を定義
   var pages = [];
   var results = [];
-
+  // GyazzTag関数の定義
+  var gt;
+      gt = new GyazzTag;
 
   // Gyazzのページ一覧を取得する
   return {
@@ -166,12 +168,12 @@ angular.module('starter.services', [])
               //orig_md5: 'ec0c02c2884ec60d59cb38ec711e34f4',
               data: data
           },
-          xhrFields: {
-            withCredentials: true
-          },
-          headers: {
-            "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-          }
+          // xhrFields: {
+          //   withCredentials: true
+          // },
+          // headers: {
+          //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+          // }
       }).done(function(data){
         return data;
       }).fail(function(data){
@@ -182,12 +184,12 @@ angular.module('starter.services', [])
     getPages: function() {
       return $.ajax({
         url: GYAZZ_URL + GYAZZ_WIKI_NAME,
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
           var i = 0;
           var first_pages = [];
@@ -224,12 +226,12 @@ angular.module('starter.services', [])
     getPageDetail: function(pageTitle) {
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/'+pageTitle+'/json',
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
           var pageDetail = [];
 
@@ -250,58 +252,21 @@ angular.module('starter.services', [])
         //
         // Gyazo記法をHTMLに変換する
         //
-        // トリプルカッコに該当する場合
-        if(text.match(/\[\[\[/g)) {
-            var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
-            // 画像URLの場合は縮小したimgタグに変換
-            if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
-              text = text.replace(/\[\[\[(.*?)\]\]\]/g, '<img src="$1" class="mini_img">')
-            } else {
-              // 文字列の場合は太字への変換
-              text = text.replace(/\[\[\[(.*?)\]\]\]/g, '<b>$1</b>')
-            }
-        }
-        // ダブルカッコに該当する場合
-        if(text.match(/\[\[/g)) {
-            var t = text.replace(/\[\[\[*(.*?)>*\]\]\]/g,'$1');
-            // 画像URLの場合はimgタグに変換
-            if(t.match(/http[s]?\:\/\/[\w\+\$\;\?\.\%\,\!\#\~\*\/\:\@\&\\\=\_\-]+(jpg|jpeg|gif|png|bmp)/g)) {
-              text = text.replace(/\[\[(.*?)\]\]/g, '<img src="$1">')
-            } else if(t.match(/(http[s]?):\/\/.+/)) {
-              if(t.match(/^ +/)) {
-                // 文字付きリンクの場合は、変換(空白がある場合)
-                text = text.replace(/\[\[(.*?) (.*?)\]\]/g, '<span class="gyazz_link" ng-click="goNextPage(\'$1\')">$2</span>');
-              } else {
-                // URLの場合はリンクに変換
-                text = text.replace(/\[\[(.*?)\]\]/g, '<div class="gyazz_blank_link" ng-click="openWebPage(\'$1\')">$1<span class="icon ion-forward"></span></div>')
-              }
-            } else {
-              // 普通の文字列の場合は、Gyazzページヘのリンクにする
-              //href="#/tab/pagelist/pages/$1"
-              text = text.replace(/\[\[(.*?)\]\]/g, '<span class="gyazz_link" ng-click="goNextPage(\'$1\')">$1</span>');
-            }
-        }
-        // 先頭の空白をインデントに変換する
-        if(text.match(/^ +/)) {
-          // 先頭から連続した空白のインデントは未実装
-          text = text.replace(/^ +/g, '<span class="indent icon ion-arrow-right-b"></span>');
-        } else if(!text.match(/\S/g)) {
-          // 大見出し（空白なし）の場合
-          text = '';
-        } else {
-          text = '<span class="caption">' + text + '</span>';
-        }
-        return text
+        var tag = gt.expand(text, GYAZZ_WIKI_NAME, null, null, GYAZZ_URL);
+        var _indent = tag.match(/^( *)/)[1].length;
+        tag = tag.replace(/^ +/, '');
+        var data = '<p class="indent indent'+_indent+'">'+tag+'</p>';
+        return data
     },
     getRandomPageDetail: function() {
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__random',
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
         var title = $(data).find('#title').text();
             title = title.replace(/[\n\r]/g,"")
@@ -316,12 +281,12 @@ angular.module('starter.services', [])
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
         //url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
 
-        xhrFields: {
-          withCredentials: true
-        },
-        headers: {
-          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        // xhrFields: {
+        //   withCredentials: true
+        // },
+        // headers: {
+        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        // }
       }).then(function(data) {
         var first_results = [];
         var i = 0;
