@@ -1,9 +1,9 @@
 angular.module('starter.services', [])
 
-// .constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
-// .constant('GYAZZ_WIKI_NAME', '増井研')
-.constant('GYAZZ_URL', 'http://gyazz.com/')
-.constant('GYAZZ_WIKI_NAME', 'UIPedia')
+.constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
+.constant('GYAZZ_WIKI_NAME', '増井研')
+// .constant('GYAZZ_URL', 'http://gyazz.com/')
+// .constant('GYAZZ_WIKI_NAME', 'UIPedia')
 
 .directive('htmlData', function($compile, $parse) {
     return {
@@ -166,12 +166,12 @@ angular.module('starter.services', [])
               //orig_md5: 'ec0c02c2884ec60d59cb38ec711e34f4',
               data: data
           },
-          // xhrFields: {
-          //   withCredentials: true
-          // },
-          // headers: {
-          //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-          // }
+          xhrFields: {
+            withCredentials: true
+          },
+          headers: {
+            "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+          }
       }).done(function(data){
         return data;
       }).fail(function(data){
@@ -182,12 +182,12 @@ angular.module('starter.services', [])
     getPages: function() {
       return $.ajax({
         url: GYAZZ_URL + GYAZZ_WIKI_NAME,
-        // xhrFields: {
-        //   withCredentials: true
-        // },
-        // headers: {
-        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        // }
+        xhrFields: {
+          withCredentials: true
+        },
+        headers: {
+          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        }
       }).then(function(data) {
           var i = 0;
           var first_pages = [];
@@ -224,12 +224,12 @@ angular.module('starter.services', [])
     getPageDetail: function(pageTitle) {
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/'+pageTitle+'/json',
-        // xhrFields: {
-        //   withCredentials: true
-        // },
-        // headers: {
-        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        // }
+        xhrFields: {
+          withCredentials: true
+        },
+        headers: {
+          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        }
       }).then(function(data) {
           var pageDetail = [];
 
@@ -296,12 +296,12 @@ angular.module('starter.services', [])
     getRandomPageDetail: function() {
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__random',
-        // xhrFields: {
-        //   withCredentials: true
-        // },
-        // headers: {
-        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        // }
+        xhrFields: {
+          withCredentials: true
+        },
+        headers: {
+          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        }
       }).then(function(data) {
         var title = $(data).find('#title').text();
             title = title.replace(/[\n\r]/g,"")
@@ -313,15 +313,15 @@ angular.module('starter.services', [])
     searchPage: function(query) {
       results = [];
       return $.ajax({
-        //url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
-        url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
+        url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
+        //url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
 
-        // xhrFields: {
-        //   withCredentials: true
-        // },
-        // headers: {
-        //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        // }
+        xhrFields: {
+          withCredentials: true
+        },
+        headers: {
+          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        }
       }).then(function(data) {
         var first_results = [];
         var i = 0;
