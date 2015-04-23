@@ -151,6 +151,8 @@ angular.module('starter.services', [])
 
   // ページリストの配列を定義
   var pages = [];
+  var results = [];
+
 
   // Gyazzのページ一覧を取得する
   return {
@@ -309,9 +311,10 @@ angular.module('starter.services', [])
       });
     },
     searchPage: function(query) {
-      var results = [];
       return $.ajax({
         url: GYAZZ_URL+GYAZZ_WIKI_NAME+'/__search/?q='+query,
+        //url: GYAZZ_URL+'/__search/'+GYAZZ_WIKI_NAME+'?q='+query,
+
         // xhrFields: {
         //   withCredentials: true
         // },
@@ -319,6 +322,7 @@ angular.module('starter.services', [])
         //   "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
         // }
       }).then(function(data) {
+        var first_results = [];
         var i = 0;
         $(data).find('.tag').each(function() {
           var result = {
@@ -326,13 +330,23 @@ angular.module('starter.services', [])
             title : $(this).text()
           }
           results.push(result);
-          if(i == 100) {
-            return false;
+          if(i < 25) {
+            first_results.push(result);
           }
           i++;
         });
-        return results
+        return first_results
       });
+    },
+    getMoreSearch: function(id) {
+      var more_results = [];
+          id = Number(id);
+      for (var i=0; i<results.length; i++){
+        if(i>id && i<(id+25)) {
+          more_results.push(results[i]);
+        }
+      }
+      return more_results
     }
   };
 });
