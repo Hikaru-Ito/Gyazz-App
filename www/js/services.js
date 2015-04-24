@@ -238,7 +238,7 @@ angular.module('starter.services', [])
 
           $.each(data.data, function(i, value) {
             var text = value;
-            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'" ng-change="onInputText($eve)" ng-blur="endEditMode()"></textarea></label>';
+            var original_data = '<label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-model="gyazz'+i+'" ng-init="gyazz'+i+'=\''+text+'\'" ng-change="onInputText($eve)" ng-blur="endEditMode()" ng-trim="false"></textarea></label>';
             text = '<span class="conversion_text htmlData" content="transParagraph(gyazz'+i+')"></span>' + original_data;
 
             // 配列に追加

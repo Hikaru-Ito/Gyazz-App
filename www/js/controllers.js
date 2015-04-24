@@ -198,6 +198,9 @@ angular.module('starter.controllers', [])
         $('ion-nav-view[nav-view="active"] ion-view[nav-view="active"] .raw-textarea .original_data').each(function(i) {
           var pageDetailNumber = i;
           var text_data = $(this).val();
+          if(text_data == '') {
+            return true;
+          }
           // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
           if (text_data.match(/\r\n/) || text_data.match(/(\n|\r)/)) {
             arr = text_data.split(/\r\n|\r|\n/);
@@ -211,7 +214,7 @@ angular.module('starter.controllers', [])
             $scope.pageDetail.splice(pageDetailNumber, 1);
           }
           page_all_data += text_data;
-          page_all_data += '\n';
+          page_all_data += '\n'; // 最後のeachにこれを足すと、編集するごとに末尾に謎の空白ができる
         });
         Pages.writePage($scope.page.title, page_all_data).then(function(data) {
           $timeout(function() {
