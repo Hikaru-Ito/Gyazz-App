@@ -263,16 +263,32 @@ ion-refresher .spinner svg {
 }
 .gyazz_page .conversion_text .indent1,
 .gyazz_page .conversion_text .indent2,
-.gyazz_page .conversion_text .indent3 {
+.gyazz_page .conversion_text .indent3,
+.gyazz_page .conversion_text .indent4,
+.gyazz_page .conversion_text .indent5 {
 	position: relative;
 	font-size: 96%;
 }
 .gyazz_page .conversion_text .indent1 {
 	margin-left: 22px;
 }
+.gyazz_page .conversion_text .indent2 {
+	margin-left: 28px;
+}
+.gyazz_page .conversion_text .indent3 {
+	margin-left: 32px;
+}
+.gyazz_page .conversion_text .indent4 {
+	margin-left: 36px;
+}
+.gyazz_page .conversion_text .indent5 {
+	margin-left: 40px;
+}
 .gyazz_page .conversion_text .indent1:before,
 .gyazz_page .conversion_text .indent2:before,
-.gyazz_page .conversion_text .indent3:before {
+.gyazz_page .conversion_text .indent3:before,
+.gyazz_page .conversion_text .indent4:before,
+.gyazz_page .conversion_text .indent5:before {
 	position: absolute;
 	top:10px;
 	left:-14px;
@@ -281,15 +297,13 @@ ion-refresher .spinner svg {
 	width: 0;
 	height: 0;
 	border: 7px solid transparent;
+	border-left: 7px solid #FF8F00;
+}
+.gyazz_page .conversion_text .indent2:before {
 	border-left: 7px solid #FBC02D;
 }
-.gyazz_page .conversion_text .indent1:after {
-	content:'';
-	display: block;
-	clear:both;
-}
-.gyazz_page .conversion_text .indent2 {
-	padding:0 6px 0 12px;
+.gyazz_page .conversion_text .indent3:before {
+	border-left: 7px solid #FFEB3B;
 }
 textarea.original_data {
 	font-size: 130%;
