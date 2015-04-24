@@ -56,7 +56,7 @@ GyazzTag = (function() {
         all = m[0], pre = m[1], inner = m[2], dummy = m[3], post = m[4];
         switch (false) {
           case !(t = inner.match(/^(https?:\/\/[^ ]+) (.*)\.(jpg|jpeg|jpe|png|gif)$/i)):
-            matched.push('<img src="' + t[1]+ '" border="none" ng-click="openWebPage(\'' + t[1] + '\')">');
+            matched.push('<img src="' + t[2]+ '.' + t[3]+ '" border="none" ng-click="openWebPage(\'' + t[1] + '\')">');
             break;
           case !(t = inner.match(/^(https?:\/\/.+)\.(jpg|jpeg|jpe|png|gif)$/i)):
             matched.push('<img src="' + t[1] + '.' + t[2] + '" border="none" ng-click="openWebPage(\'' + t[1] + '.' + t[2] + '\')">');
@@ -68,11 +68,12 @@ GyazzTag = (function() {
               screen_name = t[1].replace(/^@/, '');
               link_to = 'https://twitter.com/' + screen_name;
               img_url = 'http://twiticon.herokuapp.com/' + screen_name + '/mini';
+              matched.push('<img src="' + img_url + '" class="icon_char" height="24" width="24" border="0" alt="' + link_to + '" title="' + link_to + '" ng-click="openWebPage(\'' + link_to + '\')">');
             } else {
-              link_to = gyazz_url + wiki + '/' + t[1];
+              link_to = 'http://pitecan:masu1lab@gyazz.masuilab.org/' + wiki + '/' + t[1];
               img_url = link_to + '/icon';
+              matched.push('<img src="' + img_url + '" class="icon_char" height="24" width="24" border="0" alt="' + link_to + '" title="' + link_to + '" ng-click="goNextPage(\'' + t[1] + '\')">');
             }
-            matched.push('<img src="' + img_url + '" class="icon" height="24" border="0" alt="' + link_to + '" title="' + link_to + '" ng-click="openWebPage(\'' + link_to + '\')">');
             break;
           case !(t = inner.match(/^(.+)\.(png|icon|jpe?g|gif)[\*x×]([1-9][0-9]*)(|\.[0-9]+)$/)):
             link_to = gyazz_url + wiki + '/' + t[1];
