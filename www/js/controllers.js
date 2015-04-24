@@ -66,7 +66,7 @@ angular.module('starter.controllers', [])
   };
   // 初めてのParagraph挿入
   $scope.insertFirstParagraph = function() {
-    var insertHtmlData = '<span class="conversion_text htmlData" content="transParagraph(gyazzNew)"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data new_gyazz_data" ng-blur="endEditMode()" ng-model="gyazzNew" ng-change="onInputText($eve)" ng-init="gyazzNew=\'\'"></textarea></label>';
+    var insertHtmlData = '<span class="conversion_text htmlData" content="transParagraph(gyazzNew)"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data new_gyazz_data" ng-blur="endEditMode()" ng-trim="false" ng-model="gyazzNew" ng-change="onInputText($eve)" ng-init="gyazzNew=\'\'"></textarea></label>';
     $scope.pageDetail.push(insertHtmlData);
     $timeout(function() {
       var _this = $('ion-view[nav-view="active"] .new_gyazz_data').closest('.paragraphWrapper');
@@ -142,7 +142,7 @@ angular.module('starter.controllers', [])
     o.value = s.substr(0, p) + mark + s.substr(p);
     o.setSelectionRange(np, np);
     o.focus();
-    $scope.$apply();
+    //$scope.$apply();
   }
   // テキストエリア自動可変
   $scope.onInputText = function(evt) {
@@ -199,6 +199,7 @@ angular.module('starter.controllers', [])
           var pageDetailNumber = i;
           var text_data = $(this).val();
           if(text_data == '') {
+            $(this).closest('.paragraphWrapper').remove(); // パラグラフを削除
             return true;
           }
           // テキストエリアの中に改行がある場合、切り取って、HTML付加してpageDetail配列に追加
@@ -207,7 +208,7 @@ angular.module('starter.controllers', [])
             for (i = 0; i < arr.length; i++) {
               var insertNumber = pageDetailNumber + i;
               var content_num = $scope.pageDetail.length;
-              var insertHtmlData = '<span class="conversion_text htmlData" content="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'" ng-change="onInputText($eve)"></textarea></label>';
+              var insertHtmlData = '<span class="conversion_text htmlData" content="transParagraph(gyazz'+content_num+')"></span><label class="item item-input raw-textarea" style="display:none;"><textarea class="original_data" ng-blur="endEditMode()" ng-trim="false" ng-model="gyazz'+content_num+'" ng-init="gyazz'+content_num+'=\''+arr[i]+'\'" ng-change="onInputText($eve)"></textarea></label>';
               $scope.pageDetail.splice(insertNumber+1, 0, insertHtmlData);
             }
             // 編集前のパラグラフを削除

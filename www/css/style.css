@@ -273,16 +273,16 @@ ion-refresher .spinner svg {
 	margin-left: 22px;
 }
 .gyazz_page .conversion_text .indent2 {
-	margin-left: 28px;
+	margin-left: 30px;
 }
 .gyazz_page .conversion_text .indent3 {
-	margin-left: 32px;
+	margin-left: 38px;
 }
 .gyazz_page .conversion_text .indent4 {
-	margin-left: 36px;
+	margin-left: 46px;
 }
 .gyazz_page .conversion_text .indent5 {
-	margin-left: 40px;
+	margin-left: 54px;
 }
 .gyazz_page .conversion_text .indent1:before,
 .gyazz_page .conversion_text .indent2:before,
