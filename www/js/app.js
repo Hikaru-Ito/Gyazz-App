@@ -1,6 +1,6 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $location) {
+.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics) {
   $ionicPlatform.ready(function() {
 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -14,6 +14,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     if(!localStorage.getItem('logined')) {
       $location.path('/login');
     }
+    // GoogleAnalyctis
+    $cordovaGoogleAnalytics.startTrackerWithId('UA-62257533-1');
+    $cordovaGoogleAnalytics.trackView('Start App');
+    $cordovaGoogleAnalytics.trackEvent('App', 'FirstRun');
   });
 })
 
