@@ -1,6 +1,8 @@
 angular.module('starter.controllers', [])
 
-
+.controller('AppCtrl', function($scope) {
+  alert('hry');
+})
 .controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $ionicModal, $timeout, $location, Pages, Stars) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;

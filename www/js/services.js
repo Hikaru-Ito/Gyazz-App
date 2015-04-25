@@ -4,6 +4,12 @@ angular.module('starter.services', [])
 .constant('GYAZZ_WIKI_NAME', '増井研')
 // .constant('GYAZZ_URL', 'http://gyazz.com/')
 // .constant('GYAZZ_WIKI_NAME', 'Hikaru')
+.constant('GCMsenderID', '545984238773') // GCM　SenderID
+.constant('PARSE_API_URL', 'https://api.parse.com/1/installations')
+.constant('X_Parse_Application_Id', 'pVATfByzSVGuH1cfC7q9sdfZhOSBBZjoToIRVXli')
+.constant('X_Parse_REST_API_Key', 'lyQJVyUEVzJCqq2A5HYNRx5ytlSuNtbjlqkwA6R6')
+
+
 
 .directive('htmlData', function($compile, $parse) {
     return {
@@ -16,6 +22,136 @@ angular.module('starter.services', [])
       }
     }
   })
+.factory('PushNotification', function($rootScope, $cordovaPush, $cordovaDialogs, $cordovaMedia, $cordovaToast, $http, GCMsenderID, PARSE_API_URL, X_Parse_Application_Id, X_Parse_REST_API_Key) {
+  var notifications = [];
+  var registerDisabled;
+  var regId;
+
+  //
+  // Notification Received
+  // rootScopeでとりあえずイベントハンドラ動いてる？
+  //
+  $rootScope.$on('$cordovaPush:notificationReceived', function (event, notification) {
+      if (ionic.Platform.isAndroid()) {
+        handleAndroid(notification);
+      } else if (ionic.Platform.isIOS()) {
+        handleIOS(notification);
+      }
+  });
+
+  return {
+    // Register
+    register : function () {
+        var config = null;
+
+        if (ionic.Platform.isAndroid()) {
+            config = {
+                "senderID": GCMsenderID
+            };
+        }
+        else if (ionic.Platform.isIOS()) {
+            config = {
+                "badge": "true",
+                "sound": "true",
+                "alert": "true"
+            }
+        }
+        $cordovaPush.register(config).then(function (result) {
+
+            $cordovaToast.showShortCenter('Registered for push notifications');
+            registerDisabled=true;
+            // AndroidはhandleAndroidでregIdを取得できる
+            if (ionic.Platform.isIOS()) {
+                regId = result;
+                storeDeviceToken("ios");
+            }
+        }, function (err) {
+            console.log("Register error " + err)
+        });
+    }
+  }
+
+  // Android Notification Received Handler
+  function handleAndroid(notification) {
+    if (notification.event == "registered") {
+        regId = notification.regid;
+        storeDeviceToken("android");
+    }
+    else if (notification.event == "message") {
+        $cordovaDialogs.alert(notification.message, "Push Notification Received");
+    }
+    else if (notification.event == "error")
+        $cordovaDialogs.alert(notification.msg, "Push notification error event");
+    else $cordovaDialogs.alert(notification.event, "Push notification handler - Unprocessed Event");
+  }
+  // IOS Notification Received Handler
+  function handleIOS(notification) {
+    if (notification.foreground == "1") {
+      if (notification.sound) {
+          var mediaSrc = $cordovaMedia.newMedia(notification.sound);
+          mediaSrc.promise.then($cordovaMedia.play(mediaSrc.media));
+      }
+      if (notification.body && notification.messageFrom) {
+          $cordovaDialogs.alert(notification.body, notification.messageFrom);
+      } else {
+        $cordovaDialogs.alert(notification.alert, "Push Notification Received");
+      }
+      if (notification.badge) {
+          $cordovaPush.setBadgeNumber(notification.badge).then(function (result) {
+              console.log("Set badge success " + result)
+          }, function (err) {
+              console.log("Set badge error " + err)
+          });
+      }
+    }
+  }
+
+  // Parseに、デバイストークンを送信する
+  // type:  Platform type (ios, android)
+  function storeDeviceToken(type) {
+    if(type == 'ios') {
+      $.ajax({
+          url: PARSE_API_URL,
+          type: "POST",
+          headers: {
+            "X-Parse-Application-Id": X_Parse_Application_Id,
+            "X-Parse-REST-API-Key": X_Parse_REST_API_Key
+          },
+          contentType : "application/json",
+          data : JSON.stringify({
+              deviceType: type,
+              deviceToken: regId,
+              channels: [
+                "Develop"
+              ]
+            })
+      }).done(function(data){
+          $cordovaToast.showLongCenter('登録完了:'+regId);
+      }).fail(function(data){
+          $cordovaToast.showLongCenter(data);
+      });
+    } else {
+      $.ajax({
+          url: PARSE_API_URL,
+          type: "POST",
+          headers: {
+            "X-Parse-Application-Id": X_Parse_Application_Id,
+            "X-Parse-REST-API-Key": X_Parse_REST_API_Key
+          },
+          contentType : "application/json",
+          data : JSON.stringify({
+              deviceType: type,
+              deviceToken: regId,
+              pushType : "gcm"
+            })
+      }).done(function(data){
+          $cordovaToast.showLongCenter('登録完了:'+regId);
+      }).fail(function(data){
+          $cordovaToast.showLongCenter(data);
+      });
+    }
+  }
+})
 .factory('DB', function($q) {
     var db;
     var self = this;

@@ -15,12 +15,14 @@
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
-    "org.apache.cordova.device",
     "org.apache.cordova.console",
     "com.ionic.keyboard",
     "org.apache.cordova.statusbar",
     "org.apache.cordova.vibration",
-    "org.apache.cordova.inappbrowser"
+    "org.apache.cordova.inappbrowser",
+    "org.apache.cordova.device",
+    "org.apache.cordova.media",
+    "org.apache.cordova.dialogs"
   ],
   "cordovaPlatforms": [
     "android",
