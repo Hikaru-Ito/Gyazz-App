@@ -1,7 +1,7 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $ionicModal, $timeout, $location, Pages, Stars) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $ionicModal, $timeout, $location, Pages, Stars) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
@@ -45,6 +45,7 @@ angular.module('starter.controllers', [])
     $timeout(function() {
       $scope.starAni = false;
     }, 1600);
+    $cordovaToast.show('スターをつけました', 'short', 'center');
   }
   $scope.removeStar = function() {
     Stars.removeStar($scope.page.title).then(function(detail) {
