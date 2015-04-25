@@ -37,7 +37,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
   .state('tab.pagelist-page', {
-    url: '/pagelist/pages/:pageTitle',
+    url: '/pagelist/pages/*pageTitle',
     views: {
       'tab-pagelist': {
         templateUrl: 'templates/page.html',
@@ -65,7 +65,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
   .state('tab.stars-page', {
-    url: '/stars/pages/:pageTitle',
+    url: '/stars/pages/*pageTitle',
     views: {
       'tab-stars': {
         templateUrl: 'templates/page.html',
@@ -92,7 +92,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
   })
   .state('tab.random-page', {
-    url: '/random/pages/:pageTitle',
+    url: '/random/pages/*pageTitle',
     views: {
       'tab-random': {
         templateUrl: 'templates/page.html',
@@ -111,7 +111,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
   .state('tab.account-page', {
-    url: '/account/pages/:pageTitle',
+    url: '/account/pages/*pageTitle',
     views: {
       'tab-account': {
         templateUrl: 'templates/page.html',
