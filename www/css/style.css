@@ -320,6 +320,46 @@ textarea.edit_page_textarea {
 	height: 300px;
 	resize: none;
 }
+.list .item {
+	font-weight: bold;
+	color:#444;
+}
+.list-issues {
+	position: relative;
+	width:96%;
+	margin:0 auto;
+	border-radius: 4px;
+	height: 80px;
+	border-bottom:1px solid #eee;
+}
+.list-issues img {
+	position: absolute;
+	width:48px;
+	height: 48px;
+	top:14px;
+	right:8px;
+	border-radius: 50%;
+	box-shadow: 0 0 2px #aaa;
+	border:2px solid #fff;
+}
+.list-issues h3 {
+	font-weight: bold;
+	font-size: 110%;
+	padding:16px 80px 0px 8px;
+	color:#444;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.list-issues p {
+	font-weight: bold;
+	font-size: 12px;
+	padding:0px 80px 4px 8px;
+	color: #666;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 .animate-show-hide.ng-hide-add,
 .animate-show-hide.ng-hide-remove {
   -webkit-transition:all linear 0.2s;

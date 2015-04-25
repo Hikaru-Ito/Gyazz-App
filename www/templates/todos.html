@@ -1,0 +1,18 @@
+<ion-view view-title="増井研ToDo">
+  <ion-nav-buttons side="right">
+
+
+  </ion-nav-buttons>
+  <ion-content class="gyazz_page padding" ng-cloak>
+    <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
+    <ion-list>
+      <div class="list">
+          <div class="list-issues" ng-repeat="todo in todos" type="item-text-wrap" ng-click="openWebPage('{{todo.url}}')">
+            <h3>{{todo.title}}</h3>
+            <p>{{todo.body}}</p>
+            <img src="{{todo.user_icon}}">
+          </div>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-view>

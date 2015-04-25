@@ -119,6 +119,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
+  .state('tab.account-issues', {
+    url: '/account/issues/*title',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/issues.html',
+        controller: 'IssuesCtrl'
+      }
+    }
+  })
+  .state('tab.account-todos', {
+    url: '/account/todos',
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/todos.html',
+        controller: 'TodosCtrl'
+      }
+    }
+  })
   .state('login', {
     url: '/login',
     templateUrl: 'templates/modal-editpage.html',

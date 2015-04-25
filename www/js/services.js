@@ -2,6 +2,8 @@ angular.module('starter.services', [])
 
 .constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
 .constant('GYAZZ_WIKI_NAME', '増井研')
+.constant('GITHUB_ISSUE_API_URL', 'https://api.github.com/repos/Hikaru-Ito/Gyazz-App/issues')
+.constant('GITHUB_MASUILAB_TODO_API_URL', 'https://api.github.com/repos/masuilab/todo/issues')
 // .constant('GYAZZ_URL', 'http://gyazz.com/')
 // .constant('GYAZZ_WIKI_NAME', 'Hikaru')
 
@@ -315,4 +317,61 @@ angular.module('starter.services', [])
       return more_results
     }
   };
+})
+.factory('Issues', function($http, GITHUB_ISSUE_API_URL) {
+  return {
+    getIssues: function(label) {
+      return $.ajax({
+        url: GITHUB_ISSUE_API_URL + '?labels='+label,
+      }).then(function(data) {
+          var i = 0;
+          var issues = [];
+          $.each(data, function(i, value) {
+            var issue = {
+              id : i,
+              number: value['number'],
+              title : value['title'],
+              url : value['html_url'],
+              user_name : value['user']['login'],
+              user_icon : value['user']['avatar_url'],
+              body : value['body']
+            }
+            issues.push(issue);
+          });
+          return issues
+        });
+    },
+    getIssue: function(title) {
+      var issue = {
+        title : title
+      }
+      return issue;
+    }
+  }
+})
+.factory('Todos', function($http, GITHUB_MASUILAB_TODO_API_URL) {
+  return {
+    getTodos: function() {
+      return $.ajax({
+        url: GITHUB_MASUILAB_TODO_API_URL,
+      }).then(function(data) {
+          var i = 0;
+          var todos = [];
+          $.each(data, function(i, value) {
+            var todo = {
+              id : i,
+              number: value['number'],
+              title : value['title'],
+              url : value['html_url'],
+              user_name : value['user']['login'],
+              user_icon : value['user']['avatar_url'],
+              body : value['body'],
+              labels : value['labels']
+            }
+            todos.push(todo);
+          });
+          return todos
+        });
+    }
+  }
 });
