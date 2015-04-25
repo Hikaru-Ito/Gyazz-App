@@ -260,6 +260,8 @@ angular.module('starter.controllers', [])
   $scope.doRefresh = function() {
     Pages.getPages().then(function(pages) {
       $scope.pages = pages;
+      $scope.isLoading = false;
+      $scope.$apply();
       $scope.$broadcast('scroll.refreshComplete');
     });
   };
