@@ -20,10 +20,18 @@
     "com.ionic.keyboard",
     "org.apache.cordova.statusbar",
     "org.apache.cordova.vibration",
-    "org.apache.cordova.inappbrowser"
+    "org.apache.cordova.inappbrowser",
+    {
+      "id": "cordova-plugin-crosswalk-webview",
+      "locator": "./engine/cordova-crosswalk-engine-c0.7.1"
+    },
+    "org.apache.cordova.splashscreen"
   ],
   "cordovaPlatforms": [
-    "android",
-    "ios"
+    "ios",
+    {
+      "platform": "android",
+      "locator": "./engine/cordova-android-c0.6.1/"
+    }
   ]
 }

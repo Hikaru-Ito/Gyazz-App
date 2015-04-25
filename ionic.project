@@ -6,5 +6,12 @@
       "path": "/%E5%A2%97%E4%BA%95%E7%A0%94",
       "proxyUrl": "http://gyazz.masuilab.org/%E5%A2%97%E4%BA%95%E7%A0%94"
     }
+  ],
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
   ]
 }
