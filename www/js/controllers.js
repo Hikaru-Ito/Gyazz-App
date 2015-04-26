@@ -1,13 +1,16 @@
 angular.module('starter.controllers', [])
 
 
-.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $ionicModal, $timeout, $location, Pages, Stars) {
+.controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $cordovaGoogleAnalytics, $ionicModal, $timeout, $location, Pages, Stars) {
   $scope.page = Pages.getPage($stateParams.pageTitle);
   $scope.isLoading = true;
   $scope.isWriting = false;
   $scope.beforeEditText = null;
   $scope.isEditing = false;
   $scope.starAni = false;
+
+  // Google Analyctis
+  $cordovaGoogleAnalytics.trackView($scope.page.title);
 
   // ページ本文を読み込む
   Pages.getPageDetail($scope.page.title).then(function(detail) {
@@ -46,10 +49,12 @@ angular.module('starter.controllers', [])
       $scope.starAni = false;
     }, 1600);
     $cordovaToast.show('スターをつけました', 'short', 'center');
+    $cordovaGoogleAnalytics.trackEvent('Star', 'AddStar', 'add', 100);
   }
   $scope.removeStar = function() {
     Stars.removeStar($scope.page.title).then(function(detail) {
     });
+    $cordovaGoogleAnalytics.trackEvent('Star', 'RemoveStar', 'remove', 100);
   }
   $scope.changeStar = function() {
     $scope.checkStar()==true ? $scope.addStar() : $scope.removeStar()
@@ -182,6 +187,9 @@ angular.module('starter.controllers', [])
            _this.find('textarea').focus();
       }, 0);
     }
+    // Google Analyctis
+    $cordovaGoogleAnalytics.trackEvent('Paragraph', 'LongTapEdit', 'start', 100);
+
   }
   // 編集モード終了（全要素に適応）
   $scope.endEditMode = function() {
@@ -223,6 +231,8 @@ angular.module('starter.controllers', [])
             $scope.isWriting = false;
           }, 100);
         });
+      // Google Analyctis
+      $cordovaGoogleAnalytics.trackEvent('Paragraph', 'Write', 'end', 100);
       } else {
         $scope.isWriting = false;
       }
@@ -325,12 +335,13 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('RandomCtrl', function($scope, $http, $controller, Pages) {
+.controller('RandomCtrl', function($scope, $http, $cordovaGoogleAnalytics, $controller, Pages) {
   // コントローラを継承
   $controller('PageCtrl', {$scope: $scope});
 
   // デフォルトタイトル
   $scope.page.title = 'Loading...';
+
 
   // ランダムページ取得
   Pages.getRandomPageDetail().then(function(detail) {
@@ -340,6 +351,7 @@ angular.module('starter.controllers', [])
       $scope.isLoading = false;
       $scope.$apply();
     });
+    $cordovaGoogleAnalytics.trackView('[Random]'+$scope.page.title);
   });
   //
   $scope.doRefresh = function() {
@@ -350,10 +362,11 @@ angular.module('starter.controllers', [])
         $scope.pageDetail = detail
         $scope.$broadcast('scroll.refreshComplete');
       });
+      $cordovaGoogleAnalytics.trackView('[Random]'+$scope.page.title);
     });
   };
 })
-.controller('SearchCtrl', function($scope, $location, $timeout, Pages) {
+.controller('SearchCtrl', function($scope, $location, $cordovaGoogleAnalytics, $timeout, Pages) {
 
   $scope.isLoading = false;
   $scope.noMoreItemsAvailable = true;
@@ -372,6 +385,9 @@ angular.module('starter.controllers', [])
       $scope.noMoreItemsAvailable = false;
       $scope.$apply();
     });
+    // Google Analyctis
+    $cordovaGoogleAnalytics.trackView('[Search]'+query);
+
   };
   $scope.showPage = function() {
     var this_page = $location.path();
@@ -399,7 +415,7 @@ angular.module('starter.controllers', [])
       alert('ログアウトしました');
   }
 })
-.controller('IssuesCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $ionicModal, $timeout, $location, Issues) {
+.controller('IssuesCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaGoogleAnalytics, $cordovaToast, $ionicModal, $timeout, $location, Issues) {
   $scope.isLoading = true;
   $scope.label = $stateParams.title;
   switch ($scope.label) {
@@ -413,6 +429,10 @@ angular.module('starter.controllers', [])
       $scope.title = '愚痴';
     break;
   }
+
+  // Google Analyctis
+  $cordovaGoogleAnalytics.trackView('['+$scope.title+']');
+
   // issuesの読み込み
   Issues.getIssues($scope.label).then(function(issues) {
     $scope.issues = issues
@@ -430,8 +450,12 @@ angular.module('starter.controllers', [])
       .then(function(event) {}).catch(function(event) {});
   }
 })
-.controller('TodosCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $ionicModal, $timeout, $location, Todos) {
+.controller('TodosCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaGoogleAnalytics, $cordovaToast, $ionicModal, $timeout, $location, Todos) {
   $scope.isLoading = true;
+
+  // Google Analyctis
+  $cordovaGoogleAnalytics.trackView('[増井研ToDo]');
+
   // todoの読み込み
   Todos.getTodos().then(function(todos) {
     $scope.todos = todos

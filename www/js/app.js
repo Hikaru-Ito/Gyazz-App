@@ -1,7 +1,12 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $location) {
+.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics) {
   $ionicPlatform.ready(function() {
+
+    // Google Analytics
+    $cordovaGoogleAnalytics.startTrackerWithId('UA-62257533-1');
+    $cordovaGoogleAnalytics.trackView('Start App');
+
 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
