@@ -191,7 +191,8 @@ angular.module('starter.services', [])
         },
         headers: {
           "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
-        }
+        },
+        timeout:5000
       }).then(function(data) {
           var i = 0;
           var first_pages = [];
@@ -209,6 +210,29 @@ angular.module('starter.services', [])
           });
           return first_pages
         });
+    },
+    getPagesFromRss: function() {
+      return $.ajax({
+        url: GYAZZ_URL + GYAZZ_WIKI_NAME + '/rss.xml',
+        xhrFields: {
+          withCredentials: true
+        },
+        headers: {
+          "Authorization": "Basic cGl0ZWNhbjptYXN1MWxhYg=="
+        }
+      }).then(function(data) {
+        var i = 0;
+        pages = [];
+        $(data).find('item').each(function() {
+          var gyazz_page = {
+            id : i,
+            title : $(this).find('title').text()
+          }
+          pages.push(gyazz_page);
+          i++;
+        });
+        return pages
+      });
     },
     getMorePages: function(id) {
       var more_pages = [];

@@ -18,6 +18,7 @@ angular.module('starter.controllers', [])
     $scope.isLoading = false;
     $scope.$apply();
   });
+
   // InAppBrowser
   $scope.openWebPage = function(url) {
    var options = {
@@ -251,17 +252,30 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('PagelistCtrl', function($scope, $timeout, $ionicPopup, $ionicLoading, Pages) {
+.controller('PagelistCtrl', function($scope, $timeout, $ionicPopup, $cordovaToast, $ionicLoading, Pages) {
   $scope.isLoading = true;
   $scope.pages = [];
   $scope.noMoreItemsAvailable = true;
   // // ページ一覧を読み込む
+  $scope.getPagesFromRss = function() {
+    Pages.getPagesFromRss().then(function(pages) {
+      $scope.pages = pages;
+      $scope.isLoading = false;
+      $scope.noMoreItemsAvailable = true;
+      $scope.$apply();
+      $scope.$broadcast('scroll.refreshComplete');
+      $cordovaToast.show('RSSから読み込みました', 'short', 'center');
+    });
+  }
   Pages.getPages().then(function(pages) {
     $scope.pages = pages;
     $scope.isLoading = false;
     $scope.noMoreItemsAvailable = false;
     $scope.$apply();
+  },function(data) {
+    $scope.getPagesFromRss();
   });
+
   $scope.loadMore = function() {
     $scope.pages = $scope.pages.concat(Pages.getMorePages($scope.pages.length));
     $scope.$broadcast('scroll.infiniteScrollComplete');
@@ -271,8 +285,11 @@ angular.module('starter.controllers', [])
     Pages.getPages().then(function(pages) {
       $scope.pages = pages;
       $scope.isLoading = false;
+      $scope.noMoreItemsAvailable = false;
       $scope.$apply();
       $scope.$broadcast('scroll.refreshComplete');
+    },function(data) {
+      $scope.getPagesFromRss();
     });
   };
 })
