@@ -48,7 +48,7 @@ or
 
 ### 4. Install Plugins
 
-```package.json```の```cordovaPlugins```をインストール
+package.jsonのcordovaPluginsをインストール
 
 ```
 % cordova plugin add org.apache.cordova.device org.apache.cordova.console ...
@@ -56,7 +56,7 @@ or
 
 ### 5. Development
 
-Add/Edit your Code in ```/www```
+Add/Edit your Code in /www
 
 
 ### 6. Build
@@ -90,6 +90,6 @@ Add/Edit your Code in ```/www```
 
 - **iOS**
 
-open ```/platform/ios/Gyazz.xcodeproj```
+open /platform/ios/Gyazz.xcodeproj
 
 
