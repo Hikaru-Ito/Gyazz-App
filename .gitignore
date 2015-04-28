@@ -5,3 +5,5 @@ node_modules/
 platforms/
 plugins/
 engine/
+android.keystore
+.DS_Store
