@@ -5,7 +5,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
     // Google Analytics
     $cordovaGoogleAnalytics.startTrackerWithId('UA-62257533-1');
-    $cordovaGoogleAnalytics.trackView('Start App');
+    $cordovaGoogleAnalytics.trackView('Start v1.1.0');
 
 
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
