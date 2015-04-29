@@ -1,18 +1,23 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics) {
+.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate) {
   $ionicPlatform.ready(function() {
 
     // Google Analytics
     $cordovaGoogleAnalytics.startTrackerWithId('UA-62257533-1');
     $cordovaGoogleAnalytics.trackView('Start v1.1.0');
 
-
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
     if (window.StatusBar) {
       StatusBar.styleLightContent();
+    }
+    // iOSのみ、ステータスバーでスクロールを戻す
+    if (window.cordova && ionic.Platform.isIOS()) {
+      window.addEventListener("statusTap", function() {
+        $ionicScrollDelegate.scrollTop(true);
+      });
     }
     // ログインを確認する
     // localStorageを使用する
