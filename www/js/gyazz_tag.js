@@ -78,27 +78,29 @@ GyazzTag = (function() {
           case !(t = inner.match(/^(.+)\.(png|icon|jpe?g|gif)[\*x×]([1-9][0-9]*)(|\.[0-9]+)$/)):
             link_to = gyazz_url + wiki + '/' + t[1];
             img_url = link_to + '/icon';
+            icons = '<span class="link" ng-click="goNextPage(\'' + t[1] + '\')">';
             switch (false) {
               case !t[1].match(/^@[\da-z_]+$/i):
                 screen_name = t[1].replace(/^@/, '');
                 link_to = 'https://twitter.com/' + screen_name;
                 img_url = 'http://twiticon.herokuapp.com/' + screen_name + '/mini';
+                icons = '<span class="link" ng-click="openWebPage(\'' + link_to + '\')">';
                 break;
               case !t[1].match(/^https?:\/\/.+$/):
                 img_url = link_to = t[1] + '.' + t[2];
+                icons = '<span class="link" ng-click="openWebPage(\'' + link_to + '\')">';
             }
             count = Number(t[3]);
-            icons = '<span class="link" ng-click="openWebPage(\'' + link_to + '\')">';
             (function() {
               _results = [];
               for (var _i = 0; 0 <= count ? _i < count : _i > count; 0 <= count ? _i++ : _i--){ _results.push(_i); }
               return _results;
             }).apply(this).forEach(function(i) {
-              return icons += '<img src="' + img_url + '" class="icon" height="24" border="0"/>';
+              return icons += '<img src="' + img_url + '" class="icon_char" height="24" width="24" border="0"/>';
             });
             if (t[4].length > 0) {
               odd = Number('0' + t[4]);
-              icons += '<img src="' + img_url + '" class="icon" height="24" width="' + (24 * odd) + '" border="0"/>';
+              icons += '<img src="' + img_url + '" class="icon_char" height="24" width="' + (24 * odd) + '" border="0"/>';
             }
             icons += "</span>";
             matched.push(icons);
