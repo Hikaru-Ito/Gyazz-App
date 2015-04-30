@@ -258,13 +258,13 @@ angular.module('starter.controllers', [])
   $scope.noMoreItemsAvailable = true;
   // // ページ一覧を読み込む
   $scope.getPagesFromRss = function() {
+    $cordovaToast.show('RSSから読み込みます', 'short', 'center');
     Pages.getPagesFromRss().then(function(pages) {
       $scope.pages = pages;
       $scope.isLoading = false;
       $scope.noMoreItemsAvailable = true;
       $scope.$apply();
       $scope.$broadcast('scroll.refreshComplete');
-      $cordovaToast.show('RSSから読み込みました', 'short', 'center');
     });
   }
   Pages.getPages().then(function(pages) {
