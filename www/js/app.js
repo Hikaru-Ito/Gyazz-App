@@ -1,6 +1,6 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate) {
+.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME) {
   $ionicPlatform.ready(function() {
 
     // Google Analytics
@@ -19,10 +19,37 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         $ionicScrollDelegate.scrollTop(true);
       });
     }
+
+    $rootScope.checkClipboardURL = function() {
+      $cordovaClipboard.paste().then(function (result) {
+        // GyazzページへのURLかどうかを確認する
+        var abc = GYAZZ_URL+GYAZZ_WIKI_NAME;
+        reg = new RegExp(abc);
+        if(result.match(reg)) {
+          var title = result.replace(GYAZZ_URL+GYAZZ_WIKI_NAME+'/', '');
+          $cordovaToast.show('URLコピーされたページに移動しました', 'short', 'center');
+          var this_page = $location.path();
+          var tab_name = this_page.split('/');
+          $location.path('/tab/'+tab_name[2]+'/pages/'+title);
+          // クリップボードの中身消す
+          $cordovaClipboard.copy('').then(function () {
+          }, function () {
+          });
+        } else {
+        }
+      }, function() {
+      });
+    }
+    document.addEventListener("resume", function() {
+      $rootScope.checkClipboardURL();
+    }, false);
     // ログインを確認する
     // localStorageを使用する
     if(!localStorage.getItem('logined')) {
       $location.path('/login');
+    } else {
+      // URLコピーを確認
+      $rootScope.checkClipboardURL();
     }
   });
 })
