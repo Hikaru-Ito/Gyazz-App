@@ -4,6 +4,11 @@ angular.module('starter.services', [])
 .constant('GYAZZ_WIKI_NAME', '増井研')
 .constant('GITHUB_ISSUE_API_URL', 'https://api.github.com/repos/Hikaru-Ito/Gyazz-App/issues')
 .constant('GITHUB_MASUILAB_TODO_API_URL', 'https://api.github.com/repos/masuilab/todo/issues')
+.value('ANDROID_GCM_SENDER_ID', 545984238773)
+.value('PARSE_API_URL', 'https://api.parse.com/1/installations')
+.value('X_Parse_Application_Id', 'pVATfByzSVGuH1cfC7q9sdfZhOSBBZjoToIRVXli')
+.value('X_Parse_REST_API_Key', 'lyQJVyUEVzJCqq2A5HYNRx5ytlSuNtbjlqkwA6R6')
+
 // .constant('GYAZZ_URL', 'http://gyazz.com/')
 // .constant('GYAZZ_WIKI_NAME', 'Hikaru')
 
@@ -18,6 +23,60 @@ angular.module('starter.services', [])
       }
     }
   })
+.factory('PushNotification', function($http, $cordovaToast, ANDROID_GCM_SENDER_ID, PARSE_API_URL, X_Parse_Application_Id, X_Parse_REST_API_Key) {
+
+
+  return {
+    registerDeviceID: function(deviceID, platform) {
+      if(platform == 'ios') {
+        $.ajax({
+            url: PARSE_API_URL,
+            type: "POST",
+            headers: {
+              "X-Parse-Application-Id": X_Parse_Application_Id,
+              "X-Parse-REST-API-Key": X_Parse_REST_API_Key
+            },
+            contentType : "application/json",
+            data : JSON.stringify({
+                deviceType: platform,
+                deviceToken: deviceID,
+                channels: [
+                  "Develop"
+                ]
+              })
+        }).done(function(data){
+            return true
+        }).fail(function(data){
+            return false
+        });
+      }
+      if(platform == 'android') {
+        $.ajax({
+            url: PARSE_API_URL,
+            type: "POST",
+            headers: {
+              "X-Parse-Application-Id": X_Parse_Application_Id,
+              "X-Parse-REST-API-Key": X_Parse_REST_API_Key
+            },
+            contentType : "application/json",
+            data : JSON.stringify({
+                deviceType: platform,
+                deviceToken: deviceID,
+                GCMSenderId: ANDROID_GCM_SENDER_ID,
+                pushType : "gcm",
+                channels: [
+                  "Develop"
+                ]
+              })
+        }).done(function(data){
+            return true
+        }).fail(function(data){
+            return false
+        });
+      }
+    }
+  }
+})
 .factory('DB', function($q) {
     var db;
     var self = this;

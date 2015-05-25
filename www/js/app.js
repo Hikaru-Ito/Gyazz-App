@@ -1,6 +1,6 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME) {
+.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotification) {
   $ionicPlatform.ready(function() {
 
     // Google Analytics
@@ -19,6 +19,76 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         $ionicScrollDelegate.scrollTop(true);
       });
     }
+
+    //
+    // プッシュ通知の連携を行う
+    //
+    var registerIOS = function() {
+         // プッシュ通知受信時のイベント登録
+        $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+          if (notification.alert) {
+            navigator.notification.alert(notification.alert);
+          }
+          if (notification.sound) {
+            var snd = new Media(event.sound);
+            snd.play();
+          }
+          if (notification.badge) {
+            $cordovaPush.setBadgeNumber(notification.badge).then(function(result) {
+            }, function(err) {
+            });
+          }
+        });
+       var iosConfig = {
+          "badge": true,
+          "sound": true,
+          "alert": true,
+        };
+        $cordovaPush.register(iosConfig).then(function(deviceToken) {
+          PushNotification.registerDeviceID(deviceToken, 'ios');
+        }, function(err) {
+          alert("Registration error: " + err)
+        });
+    }
+    var registerAndroid = function() {
+      // 受信時のイベント登録
+        $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+          switch(notification.event) {
+            case 'registered':
+              if (notification.regid.length > 0 ) {
+                PushNotification.registerDeviceID(notification.regid, 'android');
+              }
+              break;
+
+            case 'message':
+              alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+              break;
+
+            case 'error':
+              alert('GCM error = ' + notification.msg);
+              break;
+
+            default:
+              alert('An unknown GCM event has occurred');
+              break;
+          }
+        });
+        var androidConfig = {
+          "senderID": ANDROID_GCM_SENDER_ID,
+        };
+        $cordovaPush.register(androidConfig).then(function(result) {
+          // Success
+        }, function(err) {
+          // Error
+        })
+    }
+
+    if(ionic.Platform.isIOS()) {
+      registerIOS();
+    } else if(ionic.Platform.isAndroid()) {
+      registerAndroid();
+    }
+
 
     $rootScope.checkClipboardURL = function() {
       $cordovaClipboard.paste().then(function (result) {
