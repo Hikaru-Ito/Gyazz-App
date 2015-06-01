@@ -62,7 +62,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
               break;
 
             case 'message':
-              alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+              alert('message = ' + notification.alert + ' msgCount = ' + notification.msgcnt);
               break;
 
             case 'error':
