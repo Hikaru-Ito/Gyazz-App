@@ -4,10 +4,11 @@ angular.module('starter.services', [])
 .constant('GYAZZ_WIKI_NAME', '増井研')
 .constant('GITHUB_ISSUE_API_URL', 'https://api.github.com/repos/Hikaru-Ito/Gyazz-App/issues')
 .constant('GITHUB_MASUILAB_TODO_API_URL', 'https://api.github.com/repos/masuilab/todo/issues')
-.value('ANDROID_GCM_SENDER_ID', 545984238773)
+.value('ANDROID_GCM_SENDER_ID', '545984238773')
 .value('PARSE_API_URL', 'https://api.parse.com/1/installations')
 .value('X_Parse_Application_Id', 'pVATfByzSVGuH1cfC7q9sdfZhOSBBZjoToIRVXli')
 .value('X_Parse_REST_API_Key', 'lyQJVyUEVzJCqq2A5HYNRx5ytlSuNtbjlqkwA6R6')
+.value('GYAZZ_APP_BACKEND_URL', 'http://gyazz-app-api.herokuapp.com')
 
 // .constant('GYAZZ_URL', 'http://gyazz.com/')
 // .constant('GYAZZ_WIKI_NAME', 'Hikaru')
@@ -23,11 +24,38 @@ angular.module('starter.services', [])
       }
     }
   })
-.factory('PushNotification', function($http, $cordovaToast, ANDROID_GCM_SENDER_ID, PARSE_API_URL, X_Parse_Application_Id, X_Parse_REST_API_Key) {
+.factory('User', function($http, $rootScope, $cordovaToast, GYAZZ_APP_BACKEND_URL) {
 
+  return {
+    register : function(platform) {
+      var name = 'UserDD'+Math.floor(Math.random() * (999999 - 100000))
+      $.ajax({
+          url: GYAZZ_APP_BACKEND_URL+'/users',
+          type: "POST",
+          data :{
+            name : name,
+            platform: platform
+          }
+      }).then(function(data){
+          $cordovaToast.show('ユーザー登録完了', 'short', 'center');
+          localStorage.setItem('user_id', data._id);
+          localStorage.setItem('session_key', data.session_key);
+          if(platform == 'ios') {
+            $rootScope.registerIOS();
+          } else if(platform == 'android') {
+            $rootScope.registerAndroid();
+          }
+          return data
+      });
+    }
+  }
+})
+.factory('PushNotification', function($http, $cordovaToast, ANDROID_GCM_SENDER_ID, PARSE_API_URL, X_Parse_Application_Id, X_Parse_REST_API_Key) {
 
   return {
     registerDeviceID: function(deviceID, platform) {
+      localStorage.setItem('deviceID', deviceID);
+      var channel_id = "GyazzUserID"+localStorage.getItem('user_id');
       if(platform == 'ios') {
         $.ajax({
             url: PARSE_API_URL,
@@ -41,10 +69,12 @@ angular.module('starter.services', [])
                 deviceType: platform,
                 deviceToken: deviceID,
                 channels: [
-                  "Develop"
+                  channel_id,
+                  "ALLRECIEVE"
                 ]
               })
         }).done(function(data){
+            $cordovaToast.show('デバイスデータ登録完了', 'short', 'center');
             return true
         }).fail(function(data){
             return false
@@ -65,10 +95,12 @@ angular.module('starter.services', [])
                 GCMSenderId: ANDROID_GCM_SENDER_ID,
                 pushType : "gcm",
                 channels: [
-                  "Develop"
+                  channel_id,
+                  "ALLRECIEVE"
                 ]
               })
         }).done(function(data){
+            $cordovaToast.show('デバイスデータ登録完了', 'short', 'center');
             return true
         }).fail(function(data){
             return false
@@ -129,7 +161,7 @@ angular.module('starter.services', [])
     //}
   }
 })
-.factory('Stars', function($http, GYAZZ_URL, GYAZZ_WIKI_NAME, DB) {
+.factory('Stars', function($http, $cordovaToast, GYAZZ_URL, GYAZZ_APP_BACKEND_URL, GYAZZ_WIKI_NAME, DB) {
 
   var stars = [];
 
@@ -171,6 +203,19 @@ angular.module('starter.services', [])
         });
     },
     addStar: function(title) {
+      function postServer(title) {
+        $.ajax({
+          type: "POST",
+          url: GYAZZ_APP_BACKEND_URL+'/stars/add',
+          data: {
+              session_key: localStorage.getItem('session_key'),
+              page_name: title,
+          }
+        }).done(function() {
+        }).fail(function() {
+          $cordovaToast.show('スター情報のサーバー同期に失敗しました', 'short', 'center');
+        })
+      }
       return DB.query('INSERT INTO TestTable (title) VALUES ("'+title+'")')
         .then(function(result){
             var star = {
@@ -179,10 +224,24 @@ angular.module('starter.services', [])
               //created : result.rows.item(i).created
             }
             stars.unshift(star);
+            postServer(title);
             return result;
         });
     },
     removeStar: function(title) {
+      function postServer(title) {
+        $.ajax({
+          type: "POST",
+          url: GYAZZ_APP_BACKEND_URL+'/stars/remove',
+          data: {
+              session_key: localStorage.getItem('session_key'),
+              page_name: title,
+          }
+        }).done(function() {
+        }).fail(function() {
+          $cordovaToast.show('スター情報のサーバー同期に失敗しました', 'short', 'center');
+        })
+      }
       return DB.query('DELETE FROM TestTable WHERE title = "'+title+'"')
         .then(function(result){
             for (var i=0; i<stars.length; i++){
@@ -192,6 +251,7 @@ angular.module('starter.services', [])
                 break;
               }
             }
+            postServer(title);
             return result;
         });
     },

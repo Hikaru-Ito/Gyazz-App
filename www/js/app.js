@@ -1,6 +1,6 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
 
-.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotification) {
+.run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotification, User) {
   $ionicPlatform.ready(function() {
 
     // Google Analytics
@@ -20,10 +20,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       });
     }
 
+
     //
     // プッシュ通知の連携を行う
     //
-    var registerIOS = function() {
+    $rootScope.registerIOS = function() {
          // プッシュ通知受信時のイベント登録
         $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
           if (notification.alert) {
@@ -50,7 +51,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           alert("Registration error: " + err)
         });
     }
-    var registerAndroid = function() {
+    $rootScope.registerAndroid = function() {
       // 受信時のイベント登録
         $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
           switch(notification.event) {
@@ -74,7 +75,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
           }
         });
         var androidConfig = {
-          "senderID": ANDROID_GCM_SENDER_ID,
+          "senderID": ANDROID_GCM_SENDER_ID
         };
         $cordovaPush.register(androidConfig).then(function(result) {
           // Success
@@ -84,10 +85,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
 
     if(ionic.Platform.isIOS()) {
-      registerIOS();
+      User.register('ios');
     } else if(ionic.Platform.isAndroid()) {
-      registerAndroid();
+      User.register('android');
     }
+
+
 
 
     $rootScope.checkClipboardURL = function() {
