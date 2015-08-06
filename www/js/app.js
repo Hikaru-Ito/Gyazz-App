@@ -117,13 +117,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
     }
 
-    if(ionic.Platform.isIOS()) {
-      User.register('ios');
-    } else if(ionic.Platform.isAndroid()) {
-      User.register('android');
+    // ユーザー登録を確認する
+    if(!localStorage.getItem('user_id')) {
+      if(ionic.Platform.isIOS()) {
+        User.register('ios');
+      } else if(ionic.Platform.isAndroid()) {
+        User.register('android');
+      }
+    } else {
+      // デバイス情報登録
+      if(ionic.Platform.isIOS()) {
+        $rootScope.registerIOS();
+      } else if(ionic.Platform.isAndroid()) {
+        $rootScope.registerAndroid();
+      }
     }
-
-
 
     $rootScope.checkClipboardURL = function() {
       $cordovaClipboard.paste().then(function (result) {
@@ -148,6 +156,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     document.addEventListener("resume", function() {
       $rootScope.checkClipboardURL();
     }, false);
+
     // ログインを確認する
     // localStorageを使用する
     if(!localStorage.getItem('logined')) {
