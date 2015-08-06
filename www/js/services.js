@@ -12,7 +12,36 @@ angular.module('starter.services', [])
 
 // .constant('GYAZZ_URL', 'http://gyazz.com/')
 // .constant('GYAZZ_WIKI_NAME', 'Hikaru')
+.filter('toAgo', function() {
+  return function(input) {
+  var d = input;
+  var nD = Math.floor( new Date().getTime() / 1000 );
+  var diffTime = nD - d;
+  if(diffTime > 31536000) {
+    // 年前に変換
+    diffTime = Math.floor(diffTime / 31536000);
+    diffTime = diffTime+'年前'
+  } else if(diffTime > 86400) {
+    // 日前に変換
+    diffTime = Math.floor(diffTime / 86400);
+    diffTime = diffTime+'日前'
 
+  } else if(diffTime > 3600) {
+    // 時間前に変換
+    diffTime = Math.floor(diffTime / 3600);
+    diffTime = diffTime+'時間前'
+
+  } else if(diffTime > 60) {
+    // 分前に変換
+    diffTime = Math.floor(diffTime / 60);
+    diffTime = diffTime+'分前'
+  } else {
+    // 秒前に変換
+    diffTime = diffTime+'秒前'
+  }
+  return diffTime;
+  };
+})
 .directive('htmlData', function($compile, $parse) {
     return {
       restrict: 'C',
@@ -28,7 +57,8 @@ angular.module('starter.services', [])
 
   return {
     register : function(platform) {
-      var name = 'UserDD'+Math.floor(Math.random() * (999999 - 100000))
+      // すでに登録されている場合を分岐しなければならない
+      var name = 'UserID'+Math.floor(Math.random() * (999999 - 100000))
       $.ajax({
           url: GYAZZ_APP_BACKEND_URL+'/users',
           type: "POST",
@@ -55,6 +85,8 @@ angular.module('starter.services', [])
   return {
     registerDeviceID: function(deviceID, platform) {
       localStorage.setItem('deviceID', deviceID);
+      alert('デバイスデータ登録開始'+deviceID);
+
       var channel_id = "GyazzUserID"+localStorage.getItem('user_id');
       if(platform == 'ios') {
         $.ajax({
@@ -101,6 +133,7 @@ angular.module('starter.services', [])
               })
         }).done(function(data){
             $cordovaToast.show('デバイスデータ登録完了', 'short', 'center');
+            console.log('デバイスデータ登録完了');
             return true
         }).fail(function(data){
             return false
@@ -514,6 +547,17 @@ angular.module('starter.services', [])
             todos.push(todo);
           });
           return todos
+        });
+    }
+  }
+})
+.factory('Notifications', function($http, GYAZZ_APP_BACKEND_URL) {
+  return {
+    getLists: function() {
+      return $.ajax({
+        url: GYAZZ_APP_BACKEND_URL+'/notifications',
+      }).then(function(data) {
+          return data
         });
     }
   }

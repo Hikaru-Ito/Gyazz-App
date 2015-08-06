@@ -28,7 +28,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
          // プッシュ通知受信時のイベント登録
         $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
           if (notification.alert) {
-            navigator.notification.alert(notification.alert);
+            $cordovaToast.show(notification.alert, 'short', 'center');
           }
           if (notification.sound) {
             var snd = new Media(event.sound);
@@ -52,36 +52,69 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         });
     }
     $rootScope.registerAndroid = function() {
-      // 受信時のイベント登録
-        $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-          switch(notification.event) {
-            case 'registered':
-              if (notification.regid.length > 0 ) {
-                PushNotification.registerDeviceID(notification.regid, 'android');
-              }
-              break;
 
-            case 'message':
-              alert('message = ' + notification.alert + ' msgCount = ' + notification.msgcnt);
-              break;
+      console.log('Android登録開始');
+      alert('Android登録開始');
+      alert(ANDROID_GCM_SENDER_ID);
 
-            case 'error':
-              alert('GCM error = ' + notification.msg);
-              break;
 
-            default:
-              alert('An unknown GCM event has occurred');
-              break;
-          }
-        });
-        var androidConfig = {
-          "senderID": ANDROID_GCM_SENDER_ID
-        };
-        $cordovaPush.register(androidConfig).then(function(result) {
-          // Success
-        }, function(err) {
-          // Error
-        })
+      var androidConfig = {
+        "senderID": ANDROID_GCM_SENDER_ID
+      };
+
+      $cordovaPush.register(androidConfig).then(function(result) {
+        // Success
+      }, function(err) {
+        // Error
+      })
+
+      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+        switch(notification.event) {
+          case 'registered':
+            if (notification.regid.length > 0 ) {
+              alert('registration ID = ' + notification.regid);
+            }
+            break;
+
+          case 'message':
+            // this is the actual push notification. its format depends on the data model from the push server
+            alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+            break;
+
+          case 'error':
+            alert('GCM error = ' + notification.msg);
+            break;
+
+          default:
+            alert('An unknown GCM event has occurred');
+            break;
+        }
+      });
+
+      // // 受信時のイベント登録
+      // $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+      //   console.log('Pushイベント受信'+notification.event);
+      //   switch(notification.event) {
+      //     case 'registered':
+      //       if (notification.regid.length > 0 ) {
+      //         PushNotification.registerDeviceID(notification.regid, 'android');
+      //       }
+      //       break;
+
+      //     case 'message':
+      //       alert('message = ' + notification.alert + ' msgCount = ' + notification.msgcnt);
+      //       break;
+
+      //     case 'error':
+      //       alert('GCM error = ' + notification.msg);
+      //       break;
+
+      //     default:
+      //       alert('An unknown GCM event has occurred');
+      //       break;
+      //   }
+      // });
+
     }
 
     if(ionic.Platform.isIOS()) {
@@ -89,7 +122,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     } else if(ionic.Platform.isAndroid()) {
       User.register('android');
     }
-
 
 
 
@@ -210,7 +242,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-
+  .state('tab.notification', {
+    url: '/notification',
+    views: {
+      'tab-notification': {
+        templateUrl: 'templates/tab-notification.html',
+        controller: 'NotificationCtrl'
+      }
+    }
+  })
+  .state('tab.notification-page', {
+    url: '/notification/pages/*pageTitle',
+    views: {
+      'tab-notification': {
+        templateUrl: 'templates/page.html',
+        controller: 'PageCtrl'
+      }
+    }
+  })
   .state('tab.account', {
     url: '/account',
     views: {

@@ -511,4 +511,26 @@ angular.module('starter.controllers', [])
         $scope.errorMessage = true;
       }
     }
+})
+.controller('NotificationCtrl', function($scope, $location, Notifications) {
+  $scope.isLoading = true;
+  $scope.goNextPage = function(title) {
+    var this_page = $location.path();
+    // 現在のタブのstateを取得
+    var tab_name = this_page.split('/');
+    $location.path('/tab/'+tab_name[2]+'/pages/'+title);
+  }
+  // スター覧を読み込む
+  Notifications.getLists().then(function(data) {
+    $scope.notifications = data;
+    $scope.isLoading = false;
+    $scope.$apply();
+    });
+  //PullToRefresh
+  $scope.doRefresh = function() {
+    Notifications.getLists().then(function(data) {
+      $scope.notifications = data;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
 });

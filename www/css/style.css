@@ -360,6 +360,29 @@ textarea.edit_page_textarea {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+.notification-item {
+	position: relative;
+	width:96%;
+	margin:0 auto;
+	border-radius: 4px;
+	height: 80px;
+	border-bottom:1px solid #eee;
+}
+.notification-item .title {
+	font-weight: bold;
+	font-size: 110%;
+	color:#444;
+	padding:16px 8px 8px 8px;
+}
+.notification-item .date {
+	position: absolute;
+	font-weight: bold;
+	font-size: 100%;
+	color:#aaa;
+	bottom:8px;
+	right: 8px;
+}
+
 .animate-show-hide.ng-hide-add,
 .animate-show-hide.ng-hide-remove {
   -webkit-transition:all linear 0.2s;
