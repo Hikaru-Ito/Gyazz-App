@@ -43,6 +43,8 @@ errorHandler = (error) ->
 ###
 gulp.task 'default', ['watch']
 
+gulp.task 'prepare', ['sass', 'coffee', 'jade']
+
 gulp.task 'sass', ->
   gulp.src './www/scss/**.scss'
     .pipe plumber
