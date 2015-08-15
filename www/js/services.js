@@ -1,4 +1,4 @@
-angular.module('starter.services', [])
+angular.module('gyazzapp.services', [])
 
 .constant('GYAZZ_URL', 'http://gyazz.masuilab.org/')
 .constant('GYAZZ_WIKI_NAME', '増井研')

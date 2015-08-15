@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('gyazz.controllers', [])
 
 
 .controller('PageCtrl', function($scope, $state, $stateParams, $cordovaVibration, $cordovaInAppBrowser, $cordovaToast, $cordovaGoogleAnalytics, $ionicModal, $timeout, $location, Pages, Stars) {
@@ -248,9 +248,8 @@ angular.module('starter.controllers', [])
          texts_area.find('textarea').blur();
     }, 0);
   }
-
-
 })
+
 
 .controller('PagelistCtrl', function($scope, $timeout, $ionicPopup, $cordovaToast, $ionicLoading, Pages) {
   $scope.isLoading = true;

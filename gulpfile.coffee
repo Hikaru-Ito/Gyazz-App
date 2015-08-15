@@ -29,12 +29,11 @@ gulp.task 'sass', ->
 
 gulp.task 'coffee', ->
   gulp.src paths.coffee
-    .pipe do coffeelint
+    .pipe coffeelint opt: {max_line_length: {value: 1024, level: 'ignore'}}
     .pipe do coffeelint.reporter
     .pipe coffee
       bare: true
     .pipe conc 'application.js'
-    # .pipe do uglify
     .pipe gulp.dest './www/js'
 
 gulp.task 'watch', ->

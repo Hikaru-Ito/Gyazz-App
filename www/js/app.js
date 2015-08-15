@@ -1,25 +1,27 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova'])
+angular.module('gyazz', [
+  'ionic', 'gyazz.controllers', 'gyazz.services', 'ngCordova'])
 
 .run(function($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotification, User) {
+
   $ionicPlatform.ready(function() {
 
     // Google Analytics
     $cordovaGoogleAnalytics.startTrackerWithId('UA-62257533-1');
     $cordovaGoogleAnalytics.trackView('Start v1.1.0');
 
+    //
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
     if (window.StatusBar) {
       StatusBar.styleLightContent();
     }
-    // iOSのみ、ステータスバーでスクロールを戻す
+    // iOSのみ、ステータスバーでタップでスクロールを戻す
     if (window.cordova && ionic.Platform.isIOS()) {
       window.addEventListener("statusTap", function() {
         $ionicScrollDelegate.scrollTop(true);
       });
     }
-
 
     //
     // プッシュ通知の連携を行う
@@ -52,70 +54,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         });
     }
     $rootScope.registerAndroid = function() {
-
-      console.log('Android登録開始');
-      alert('Android登録開始');
-      alert(ANDROID_GCM_SENDER_ID);
-
-
-      var androidConfig = {
-        "senderID": ANDROID_GCM_SENDER_ID
-      };
-
-      $cordovaPush.register(androidConfig).then(function(result) {
-        // Success
-      }, function(err) {
-        // Error
-      })
-
-      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-        switch(notification.event) {
-          case 'registered':
-            if (notification.regid.length > 0 ) {
-              alert('registration ID = ' + notification.regid);
-            }
-            break;
-
-          case 'message':
-            // this is the actual push notification. its format depends on the data model from the push server
-            alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
-            break;
-
-          case 'error':
-            alert('GCM error = ' + notification.msg);
-            break;
-
-          default:
-            alert('An unknown GCM event has occurred');
-            break;
-        }
-      });
-
-      // // 受信時のイベント登録
-      // $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-      //   console.log('Pushイベント受信'+notification.event);
-      //   switch(notification.event) {
-      //     case 'registered':
-      //       if (notification.regid.length > 0 ) {
-      //         PushNotification.registerDeviceID(notification.regid, 'android');
-      //       }
-      //       break;
-
-      //     case 'message':
-      //       alert('message = ' + notification.alert + ' msgCount = ' + notification.msgcnt);
-      //       break;
-
-      //     case 'error':
-      //       alert('GCM error = ' + notification.msg);
-      //       break;
-
-      //     default:
-      //       alert('An unknown GCM event has occurred');
-      //       break;
-      //   }
-      // });
-
+      // Androidのプッシュ通知は未対応
+      console.log('Androidのプッシュ通知は未対応');
     }
+
 
     // ユーザー登録を確認する
     if(!localStorage.getItem('user_id')) {
