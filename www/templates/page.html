@@ -1,19 +1,14 @@
+
 <ion-view view-title="{{page.title}}">
   <ion-nav-buttons side="right">
-
-  	<div class="button-icon icon" ng-click="changeStar()" ng-class="(checkStar()==true) ? 'ion-ios-star-outline' : 'star-on ion-ios-star animated bounceIn'"></div>
-
+    <div ng-click="changeStar()" ng-class="(checkStar()==true) ? 'ion-ios-star-outline' : 'star-on ion-ios-star animated bounceIn'" class="button-icon icon"></div>
   </ion-nav-buttons>
-  	<div class="writing_message animate-show-hide" ng-show="isWriting" ng-cloak>書き込み中</div>
-  <ion-content class="gyazz_page padding" on-swipe-right="swipeRight()" on-swipe-left="swipeLeft()" ng-cloak>
-    <ion-refresher on-refresh="doRefresh()" spinner="ripple" ng-cloak></ion-refresher>
-  	<div class="loading" ng-show="isLoading" ng-cloak>
-		<ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner>
-  	</div>
-
-      <div class="empty_tap_insert_button" ng-if="pageDetail.length == 0" on-hold="insertFirstParagraph()" ng-cloak>ロングタップで入力</div>
-    <span class="htmlData paragraphWrapper" ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event);" ng-cloak>
-    </span>
+  <div ng-show="isWriting" ng-cloak="" class="writing_message animate-show-hide">書き込み中</div>
+  <ion-content on-swipe-right="swipeRight()" on-swipe-left="swipeLeft()" ng-cloak="" class="gyazz_page padding">
+    <ion-refresher on-refresh="doRefresh()" spinner="ripple" ng-cloak=""></ion-refresher>
+    <div ng-show="isLoading" ng-cloak="" class="loading">
+      <ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner>
+    </div>
+    <div ng-if="pageDetail.length == 0" on-hold="insertFirstParagraph()" ng-cloak="" class="empty_tap_insert_button">ロングタップで入力</div><span ng-repeat="paragraph in pageDetail track by $index" content="paragraph" on-hold="editMode($event);" ng-cloak="" class="htmlData paragraphWrapper"></span>
   </ion-content>
-  <!-- <div class="pop_icon_stared animated bounce" ng-class="(starAni==true) ? 'show animated bounce' : 'hide'" ng-cloak>New!</div> -->
 </ion-view>

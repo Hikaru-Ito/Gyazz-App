@@ -1,0 +1,22 @@
+ion-view(view-title='Gyazzページ検索')
+
+  ion-nav-title
+
+  ion-nav-buttons(side='right')
+    form(name='signinForm', novalidate='', ng-submit='searchPage(query)')
+      input.search_text_input(type='text', placeholder='検索ワードを入力', ng-model='query')
+
+  ion-content
+    
+    .loading(ng-show='isLoading')
+      ion-spinner.spinner-assertive(icon='spiral')
+    
+    ion-list(can-swipe='false')
+      .empty_sign(ng-show='noData', ng-cloak='')
+        .icon.ion-qr-scanner
+        .text データがありません
+      ion-item.gyazz-pagelist.item-icon-right(ng-repeat='result in results', type='item-text-wrap', ng-click='goNextPage(result.title)')
+        h2 {{result.title}}
+        i.icon.ion-chevron-right.icon-accessory
+    
+    ion-infinite-scroll(ng-if='!noMoreItemsAvailable', on-infinite='loadMore()', distance='10%')

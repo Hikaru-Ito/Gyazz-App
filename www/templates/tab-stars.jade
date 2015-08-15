@@ -1,0 +1,23 @@
+ion-view(view-title='MyStars')
+
+  ion-nav-buttons(side='right')
+    button.button.button-icon.icon.ion-ios-search(ng-click='showPage()', ng-controller='SearchCtrl')
+    button.button.button-icon.icon.ion-ios-compose-outline(ng-click='showPopup()', ng-controller='NewpageCtrl')
+
+  ion-content.padding
+    .loading(ng-show='isLoading')
+      ion-spinner.spinner-assertive(icon='spiral')
+    
+    ion-refresher(on-refresh='doRefresh()', spinner='ripple')
+    
+    ion-list(can-swipe='false')
+      .empty_sign(ng-if='stars.length == 0', ng-cloak='')
+        .icon.ion-qr-scanner
+        .text データがありません
+        .sub_text
+          | Gyazzページにスターをつけると
+          br
+          | ここに表示されます。
+      ion-item.gyazz-pagelist.item-icon-right(ng-repeat='star in stars', type='item-text-wrap', href='#/tab/stars/pages/{{star.title}}')
+        h2 {{star.title}}
+        i.icon.ion-chevron-right.icon-accessory

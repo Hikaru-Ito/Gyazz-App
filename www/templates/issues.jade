@@ -1,0 +1,15 @@
+ion-view(view-title='{{title}}')
+
+  ion-nav-buttons(side='right')
+
+  ion-content.gyazz_page.padding(on-swipe-right='swipeRight()', on-swipe-left='swipeLeft()', ng-cloak='')
+
+    .loading(ng-show='isLoading')
+      ion-spinner.spinner-assertive(icon='spiral')
+
+    ion-list
+      .list
+        .list-issues(ng-repeat='issue in issues', type='item-text-wrap', ng-click="openWebPage('{{issue.url}}')")
+          h3 {{issue.title}}
+          p {{issue.body}}
+          img(src='{{issue.user_icon}}')

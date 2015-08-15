@@ -664,6 +664,22 @@ angular.module('gyazzapp.controllers.todos', []).controller('TodosCtrl', functio
 
 
 /*
+  生HTMLを表示するDirective
+ */
+angular.module('gyazzapp.directives.htmldata', []).directive('htmlData', function($compile, $parse) {
+  return {
+    restrict: 'C',
+    link: function(scope, element, attr) {
+      return scope.$watch(attr.content, function() {
+        element.html($parse(attr.content)(scope));
+        return $compile(element.contents())(scope);
+      }, true);
+    }
+  };
+});
+
+
+/*
   UNIXスタンプを渡してあげることでhoge分前などという形式に変換してくれる
   AngularFilter
  */
@@ -689,22 +705,6 @@ angular.module('gyazzapp.filters.toago', []).filter('toAgo', function() {
       diffTime = diffTime + '秒前';
     }
     return diffTime;
-  };
-});
-
-
-/*
-  生HTMLを表示するDirective
- */
-angular.module('gyazzapp.directives.htmldata', []).directive('htmlData', function($compile, $parse) {
-  return {
-    restrict: 'C',
-    link: function(scope, element, attr) {
-      return scope.$watch(attr.content, function() {
-        element.html($parse(attr.content)(scope));
-        return $compile(element.contents())(scope);
-      }, true);
-    }
   };
 });
 

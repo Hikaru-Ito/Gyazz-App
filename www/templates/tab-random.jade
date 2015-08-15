@@ -1,0 +1,11 @@
+ion-view(view-title='{{page.title}}')
+
+  .bar.bar-header.item-input-inset
+    label.item-input-wrapper
+      i.icon.ion-ios7-search.placeholder-icon
+      input(type='search', placeholder='Search')
+    button.button.button-clear Cancel
+      
+  .writing_message.animate-show-hide(ng-show='isWriting', ng-cloak='') 書き込み中
+  
+  ion-content

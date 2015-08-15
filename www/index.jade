@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width')
+    meta(name='format-detection', content='telephone=no')
+
+    title
+
+    // CSS
+    link(href='lib/ionic/css/ionic.css', rel='stylesheet')
+    link(href='lib/animate.css/animate.min.css', rel='stylesheet')
+    link(href='css/style.css', rel='stylesheet')
+
+    // ionic/angularjs js
+    script(src='lib/ionic/js/ionic.bundle.js')
+
+    // ngCordova
+    script(src='lib/ngCordova/dist/ng-cordova.js')
+    script(src='cordova.js')
+    script(src='https://code.jquery.com/jquery-1.11.2.min.js')
+    script(src='filters/gyazz_tag.js')
+    script(src='js/application.js')
+    
+  body(ng-app='gyazzapp')
+    ion-nav-bar.bar-gyazz
+      ion-nav-back-button
+    ion-nav-view

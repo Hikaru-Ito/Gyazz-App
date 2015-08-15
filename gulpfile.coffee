@@ -1,3 +1,6 @@
+###
+  パッケージ読み込み
+###
 gulp = require 'gulp'
 gutil = require 'gulp-util'
 bower = require 'bower'
@@ -10,16 +13,40 @@ coffee = require 'gulp-coffee'
 uglify = require 'gulp-uglify'
 coffeelint = require 'gulp-coffeelint'
 jade = require 'gulp-jade'
+plumber = require 'gulp-plumber'
+notifier = require 'node-notifier'
 
+
+###
+  ファイルパス
+###
 paths =
   sass: './www/**/*.scss'
   coffee: './www/**/*.coffee'
   jade: './www/**/*.jade'
 
+
+###
+  エラーハンドラ
+###
+errorHandler = (error) ->
+  notifier.notify
+    message: error.message
+    title: error.plugin
+    sound: true
+  , ->
+    console.log error.message
+
+
+###
+  タスク群
+###
 gulp.task 'default', ['watch']
 
 gulp.task 'sass', ->
   gulp.src './www/scss/**.scss'
+    .pipe plumber
+      errorHandler: errorHandler
     .pipe sass
       errLogToConsole: true
     .pipe gulp.dest './www/css/'
@@ -31,6 +58,8 @@ gulp.task 'sass', ->
 
 gulp.task 'coffee', ->
   gulp.src paths.coffee
+    .pipe plumber
+      errorHandler: errorHandler
     .pipe coffeelint opt: {max_line_length: {value: 1024, level: 'ignore'}}
     .pipe do coffeelint.reporter
     .pipe coffee
@@ -40,6 +69,8 @@ gulp.task 'coffee', ->
 
 gulp.task 'jade', ->
   gulp.src paths.jade
+    .pipe plumber
+      errorHandler: errorHandler
     .pipe jade
       pretty: true
     .pipe gulp.dest './www/'

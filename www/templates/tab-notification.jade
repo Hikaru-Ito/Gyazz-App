@@ -1,0 +1,16 @@
+ion-view(view-title='Notification')
+
+  ion-nav-buttons(side='right')
+    button.button.button-icon.icon.ion-ios-search(ng-click='showPage()', ng-controller='SearchCtrl')
+    button.button.button-icon.icon.ion-ios-compose-outline(ng-click='showPopup()', ng-controller='NewpageCtrl')
+
+  ion-content.padding
+
+    .loading(ng-show='isLoading')
+      ion-spinner.spinner-assertive(icon='spiral')
+
+    ion-refresher(on-refresh='doRefresh()', spinner='ripple')
+
+    .notification-item(ng-repeat='notification in notifications', ng-click='goNextPage(notification.title)')
+      .title 「{{notification.title}}」が更新されました。
+      .date {{notification.timestamp | toAgo}}

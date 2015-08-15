@@ -1,17 +1,20 @@
+
 <ion-view view-title="ページリスト">
   <ion-nav-buttons side="right">
-    <button class="button button-icon icon ion-ios-search" ng-click="showPage()" ng-controller="SearchCtrl"></button>
-    <button class="button button-icon icon ion-ios-compose-outline" ng-click="showPopup()" ng-controller="NewpageCtrl"></button>
+    <button ng-click="showPage()" ng-controller="SearchCtrl" class="button button-icon icon ion-ios-search"></button>
+    <button ng-click="showPopup()" ng-controller="NewpageCtrl" class="button button-icon icon ion-ios-compose-outline"></button>
   </ion-nav-buttons>
   <ion-content>
-    <div class="loading" ng-show="isLoading"><ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner></div>
+    <div ng-show="isLoading" class="loading">
+      <ion-spinner icon="spiral" class="spinner-assertive"></ion-spinner>
+    </div>
     <ion-refresher on-refresh="doRefresh()" spinner="ripple"></ion-refresher>
     <ion-list can-swipe="false">
-      <ion-item class="gyazz-pagelist item-icon-right" ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.title}}">
-        <h2>{{page.title}}</h2>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+      <ion-item ng-repeat="page in pages" type="item-text-wrap" href="#/tab/pagelist/pages/{{page.title}}" class="gyazz-pagelist item-icon-right">
+        <h2>{{page.title}}</h2><i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
+    <!-- 無限スクロールセンサ-->
     <ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
   </ion-content>
 </ion-view>

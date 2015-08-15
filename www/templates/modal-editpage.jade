@@ -1,0 +1,18 @@
+ion-modal-view
+
+  ion-header-bar.bar-stable
+    h1.title Gyazz for Masuilab
+
+  ion-content.padding
+
+    .errorMessage(ng-show='errorMessage') ログインに失敗しました
+
+    form(name='signinForm', novalidate='', ng-submit='signIn(user)')
+      .list
+        label.item.item-input
+          span.input-label Username
+          input.username_input(type='text', ng-model='user.username')
+        label.item.item-input
+          span.input-label Password
+          input.pass_input(type='password', ng-model='user.pass')
+      button.button.button-block.button-assertive.login-button ログイン

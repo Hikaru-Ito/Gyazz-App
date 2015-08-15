@@ -1,0 +1,30 @@
+ion-view(view-title='アカウント')
+
+  ion-content
+    .list
+      .item.item-divider 増井研
+      a.item.item-icon-right(href='#/tab/account/todos')
+        | 増井研ToDoリスト
+        i.icon.ion-chevron-right.icon-accessory
+
+      .item.item-divider GyazzApp
+      a.item.item-icon-right(href='#/tab/account/pages/GyazzAppの使い方')
+        | GyazzAppの使い方
+        i.icon.ion-chevron-right.icon-accessory
+      a.item.item-icon-right(href='#/tab/account/issues/enhancement')
+        | 搭載予定の機能/リクエスト
+        i.icon.ion-chevron-right.icon-accessory
+      a.item.item-icon-right(href='#/tab/account/issues/bug')
+        | 確認済みのバグ
+        i.icon.ion-chevron-right.icon-accessory
+      a.item.item-icon-right(href='#/tab/account/issues/愚痴')
+        | 愚痴
+        i.icon.ion-chevron-right.icon-accessory
+      a.item.item-icon-right(href='#/tab/account/pages/Hikaru')
+        | Develop@Hikaru
+        i.icon.ion-chevron-right.icon-accessory
+        
+      //
+        コメントアウトすると、デバッグ用のログアウトボタンが出現
+        a.item(href='#', ng-click='logout()')
+          | ログアウト

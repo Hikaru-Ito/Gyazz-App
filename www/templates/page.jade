@@ -1,0 +1,17 @@
+ion-view(view-title='{{page.title}}')
+
+  ion-nav-buttons(side='right')
+    .button-icon.icon(ng-click='changeStar()', ng-class="(checkStar()==true) ? 'ion-ios-star-outline' : 'star-on ion-ios-star animated bounceIn'")
+
+  .writing_message.animate-show-hide(ng-show='isWriting', ng-cloak='') 書き込み中
+
+  ion-content.gyazz_page.padding(on-swipe-right='swipeRight()', on-swipe-left='swipeLeft()', ng-cloak='')
+
+    ion-refresher(on-refresh='doRefresh()', spinner='ripple', ng-cloak='')
+
+    .loading(ng-show='isLoading', ng-cloak='')
+      ion-spinner.spinner-assertive(icon='spiral')
+
+    .empty_tap_insert_button(ng-if='pageDetail.length == 0', on-hold='insertFirstParagraph()', ng-cloak='') ロングタップで入力
+
+    span.htmlData.paragraphWrapper(ng-repeat='paragraph in pageDetail track by $index', content='paragraph', on-hold='editMode($event);', ng-cloak='')
