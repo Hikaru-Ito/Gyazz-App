@@ -7,6 +7,19 @@ ion-view(view-title='アカウント')
         | 増井研ToDoリスト
         i.icon.ion-chevron-right.icon-accessory
 
+      .item.item-divider プッシュ通知
+      li.item.item-toggle
+        | 全てのページの変更を通知する
+        label.toggle.toggle-assertive
+          input(
+            type='checkbox'
+            ng-checked='setting.all_push'
+            ng-change='changeAllPushStatus()'
+            ng-model='setting.all_push'
+            )
+          .track
+            .handle
+      
       .item.item-divider GyazzApp
       a.item.item-icon-right(href='#/tab/account/pages/GyazzAppの使い方')
         | GyazzAppの使い方
