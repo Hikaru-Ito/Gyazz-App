@@ -1,0 +1,15 @@
+ion-view(view-title='増井研ToDo')
+
+  ion-nav-buttons(side='right')
+
+  ion-content.gyazz_page.padding(ng-cloak='')
+  
+    .loading(ng-show='isLoading')
+      ion-spinner.spinner-assertive(icon='spiral')
+  
+    ion-list
+      .list
+        .list-issues(ng-repeat='todo in todos', type='item-text-wrap', ng-click="openWebPage('{{todo.url}}')")
+          h3 {{todo.title}}
+          p {{todo.body}}
+          img(src='{{todo.user_icon}}')

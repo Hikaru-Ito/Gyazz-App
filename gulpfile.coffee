@@ -9,10 +9,12 @@ sh = require 'shelljs'
 coffee = require 'gulp-coffee'
 uglify = require 'gulp-uglify'
 coffeelint = require 'gulp-coffeelint'
+jade = require 'gulp-jade'
 
 paths =
   sass: './www/**/*.scss'
   coffee: './www/**/*.coffee'
+  jade: './www/**/*.jade'
 
 gulp.task 'default', ['watch']
 
@@ -36,6 +38,13 @@ gulp.task 'coffee', ->
     .pipe conc 'application.js'
     .pipe gulp.dest './www/js'
 
+gulp.task 'jade', ->
+  gulp.src paths.jade
+    .pipe jade
+      pretty: true
+    .pipe gulp.dest './www/'
+
 gulp.task 'watch', ->
   gulp.watch paths.sass, ['sass']
   gulp.watch paths.coffee, ['coffee']
+  gulp.watch paths.jade, ['jade']
