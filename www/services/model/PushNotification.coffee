@@ -8,42 +8,42 @@ angular.module('gyazzapp.model.pushnotification', [])
 
       # localStorageに保存
       localStorage.setItem 'deviceID', deviceID
-      alert 'デバイスデータ登録開始' + deviceID
 
       # Parseの識別用のIDを生成
       channel_id = 'GyazzUserID' + localStorage.getItem('user_id')
 
       # iOS登録
       if platform is 'ios'
-        $.ajax(
+        $.ajax
           url: PARSE_API_URL
           type: 'POST'
           headers:
             'X-Parse-Application-Id': X_Parse_Application_Id
             'X-Parse-REST-API-Key': X_Parse_REST_API_Key
           contentType: 'application/json'
-          data: JSON.stringify(
+          data: JSON.stringify
             deviceType: platform
             deviceToken: deviceID
             channels: [
               channel_id
-              'ALLRECIEVE'
-            ])).done((data) ->
+              'ALLRECIEVE' # これつけると更新全部通知来るようになる
+            ]
+        .done (data) ->
           $cordovaToast.show 'デバイスデータ登録完了', 'short', 'center'
           true
-        ).fail (data) ->
+        .fail (data) ->
           false
 
       # Android登録
       if platform is 'android'
-        $.ajax(
+        $.ajax
           url: PARSE_API_URL
           type: 'POST'
           headers:
             'X-Parse-Application-Id': X_Parse_Application_Id
             'X-Parse-REST-API-Key': X_Parse_REST_API_Key
           contentType: 'application/json'
-          data: JSON.stringify(
+          data: JSON.stringify
             deviceType: platform
             deviceToken: deviceID
             GCMSenderId: ANDROID_GCM_SENDER_ID
@@ -51,10 +51,11 @@ angular.module('gyazzapp.model.pushnotification', [])
             channels: [
               channel_id
               'ALLRECIEVE'
-            ])).done((data) ->
+            ]
+        .done (data) ->
           $cordovaToast.show 'デバイスデータ登録完了', 'short', 'center'
           console.log 'デバイスデータ登録完了'
           true
-        ).fail (data) ->
+        .fail (data) ->
           false
  }
