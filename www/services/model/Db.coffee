@@ -11,7 +11,7 @@ angular.module('gyazzapp.model.db', [])
   initQuery = (tx) ->
     tx.executeSql 'CREATE TABLE IF NOT EXISTS TestTable (
       id integer primary key autoincrement,
-      value text,
+      title text unique,
       created datetime default current_timestamp)'
 
   successCB = ->
