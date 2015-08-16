@@ -32,6 +32,7 @@ angular.module('gyazzapp.controllers.account', [])
         .then ->
           $ionicLoading.hide()
         console.log 'プッシュを無効に設定しました'
+
       updateSetting()
     , 10
 

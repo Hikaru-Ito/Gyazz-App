@@ -40,6 +40,13 @@ angular.module('gyazzapp.model.pushnotification', [])
       # Parseの識別用のIDを生成
       channel_id = 'GyazzUserID' + localStorage.getItem('user_id')
 
+      # プッシュ通知の設定をチャンネル登録に反映させる
+      setting_data = JSON.parse localStorage.getItem 'setting'
+      if setting_data.all_push
+        channel_data = [channel_id, 'ALLRECIEVE']
+      else
+        channel_data = [channel_id]
+
       # iOS登録
       if platform is 'ios'
         $.ajax
@@ -52,10 +59,7 @@ angular.module('gyazzapp.model.pushnotification', [])
           data: JSON.stringify
             deviceType: platform
             deviceToken: deviceID
-            channels: [
-              channel_id
-              # 'ALLRECIEVE' # これつけると更新全部通知来るようになる
-            ]
+            channels: channel_data
         .done (data) ->
           $cordovaToast.show 'デバイスデータ登録完了', 'short', 'center'
           console.log data.objectId
@@ -78,10 +82,7 @@ angular.module('gyazzapp.model.pushnotification', [])
             deviceToken: deviceID
             GCMSenderId: ANDROID_GCM_SENDER_ID
             pushType: 'gcm'
-            channels: [
-              channel_id
-              'ALLRECIEVE'
-            ]
+            channels: channel_data
         .done (data) ->
           $cordovaToast.show 'デバイスデータ登録完了', 'short', 'center'
           console.log 'デバイスデータ登録完了'
