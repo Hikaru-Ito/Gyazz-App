@@ -16,7 +16,7 @@ angular.module 'gyazzapp', [
   'gyazzapp.filters.toago'
   'gyazzapp.directives.htmldata'
   'gyazzapp.model.user'
-  'gyazzapp.model.pushnotification'
+  'gyazzapp.model.pushnotifications'
   'gyazzapp.model.db'
   'gyazzapp.model.issues'
   'gyazzapp.model.notifications'

@@ -1,5 +1,5 @@
 angular.module('gyazzapp.controllers.account', [])
-.controller 'AccountCtrl', ($scope, $timeout, $ionicLoading, Pages, PushNotification) ->
+.controller 'AccountCtrl', ($scope, $timeout, $ionicLoading, Pages, PushNotifications) ->
 
   # 設定データを反映
   unless localStorage.getItem 'setting'
@@ -22,13 +22,13 @@ angular.module('gyazzapp.controllers.account', [])
     $timeout ->
       if $scope.setting.all_push
         # プッシュを有効に設定
-        PushNotification.changeAllPushStatus true
+        PushNotifications.changeAllPushStatus true
         .then ->
           $ionicLoading.hide()
         console.log 'プッシュを有効に設定しました'
       else
         # プッシュを無効に設定
-        PushNotification.changeAllPushStatus false
+        PushNotifications.changeAllPushStatus false
         .then ->
           $ionicLoading.hide()
         console.log 'プッシュを無効に設定しました'

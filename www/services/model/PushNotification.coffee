@@ -1,13 +1,17 @@
-angular.module('gyazzapp.model.pushnotification', [])
-.factory 'PushNotification', ($http, $cordovaToast, ANDROID_GCM_SENDER_ID, PARSE_API_URL, X_Parse_Application_Id, X_Parse_REST_API_Key) ->
+###
+  Push通知の受信設定やデバイストークン情報を登録するFactory
+###
+angular.module('gyazzapp.model.pushnotifications', [])
+.factory 'PushNotifications', ($http, $cordovaToast, ANDROID_GCM_SENDER_ID, PARSE_API_URL, X_Parse_Application_Id, X_Parse_REST_API_Key) ->
 
   return {
 
 
-    # 全プッシュ設定を変更
+    # 全部のGyazzページ変更のプッシュ受信設定を変更
     changeAllPushStatus: (bool) ->
 
       # cannelData生成
+      # ALLRECIEVEというcannelを付加すると、全受信するようになる
       channel_id = 'GyazzUserID' + localStorage.getItem('user_id')
       if bool
         channel_data = [channel_id, 'ALLRECIEVE']
@@ -27,9 +31,9 @@ angular.module('gyazzapp.model.pushnotification', [])
       .done (data) ->
         $cordovaToast.show 'プッシュ設定変更完了', 'short', 'center'
         true
-      .fail (data) ->
+      .fail (error) ->
+        console.log "プッシュ通知設定変更エラー"
         false
-
 
     # デバイス情報を登録
     registerDeviceID: (deviceID, platform) ->
@@ -86,6 +90,8 @@ angular.module('gyazzapp.model.pushnotification', [])
         .done (data) ->
           $cordovaToast.show 'デバイスデータ登録完了', 'short', 'center'
           console.log 'デバイスデータ登録完了'
+          console.log data.objectId
+          localStorage.setItem 'parse_obj_id', data.objectId
           true
         .fail (data) ->
           false

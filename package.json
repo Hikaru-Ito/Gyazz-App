@@ -31,13 +31,11 @@
       "id": "cordova-plugin-crosswalk-webview",
       "locator": "./engine/cordova-crosswalk-engine-c0.7.1"
     },
-    "org.apache.cordova.splashscreen"
+    "org.apache.cordova.splashscreen",
+    "phonegap-plugin-push"
   ],
   "cordovaPlatforms": [
     "ios",
-    {
-      "platform": "android",
-      "locator": "./engine/cordova-android-c0.6.1/"
-    }
+    "android"
   ]
 }

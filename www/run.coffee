@@ -1,6 +1,6 @@
 angular.module('gyazzapp.run', [])
 
-.run ($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotification, User) ->
+.run ($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotifications, User) ->
 
   $ionicPlatform.ready ->
 
@@ -21,51 +21,53 @@ angular.module('gyazzapp.run', [])
         $ionicScrollDelegate.scrollTop true
 
 
-    # プッシュ通知設定（iOS）
-    $rootScope.registerIOS = ->
-      # プッシュ通知受信時のイベント登録
-      $rootScope.$on '$cordovaPush:notificationReceived', (event, notification) ->
+    # 新プッシュ通知プラグインの設定
+    # このPushNotificationのインスタンスは、factoryのPushNotificationではない。
+    # ネイティブAPIを呼び出すブリッジのプラグインのインスタンスである
+    # 名前が競合していると使えない・・・
+    # プラグインを変更するよりは、Factory側の定義を変更したほうがよさそう
+    # PushNotification-FactoryをPushNotifications-Factoryに変更した
+    # 関数化した
+    $rootScope.PushNotificationInit = ->
 
-        if notification.alert
-          $cordovaToast.show notification.alert, 'short', 'center'
+      # 設定変数
+      push = PushNotification.init {
+        "android": {"senderID": ANDROID_GCM_SENDER_ID},
+        "ios": {"alert": "true", "badge": "true", "sound": "true"},
+        "windows": {}
+      }
 
-        if notification.sound
-          snd = new Media event.sound
-          snd.play()
+      # デバイストークンを取得したら、Factoryに流す
+      push.on 'registration', (data) ->
+        if ionic.Platform.isIOS()
+          PushNotifications.registerDeviceID data.registrationId, 'ios'
+        else if ionic.Platform.isAndroid()
+          PushNotifications.registerDeviceID data.registrationId, 'android'
+        console.log data.registrationId
 
-        if notification.badge
-          $cordovaPush.setBadgeNumber notification.badge
+      # foregroundでPush受信したら、トーストメッセージを出す
+      push.on 'notification', (data) ->
+        console.log JSON.stringify data
+        $cordovaToast.show data.additionalData.data.alert, 'short', 'center'
 
-      iosConfig =
-        'badge': true
-        'sound': true
-        'alert': true
-
-      $cordovaPush.register(iosConfig).then (deviceToken) ->
-        PushNotification.registerDeviceID deviceToken, 'ios'
-      , (err) ->
-        alert 'Registration error: ' + err
-
-
-    # プッシュ通知設定（Android）
-    $rootScope.registerAndroid = ->
-      console.log 'Androidのプッシュ通知は未対応'
+      # エラーハンドラ
+      push.on 'error', (e) ->
+        console.log "プッシュ通知エラー : #{e}"
 
 
     # ユーザー登録を確認する
+    # ユーザー登録していれば、Push通知のデバイストークン初期化
+    # ユーザー登録していなければ、User-Factoryに登録を促す
     if !localStorage.getItem('user_id')
       if ionic.Platform.isIOS()
         User.register 'ios'
       else if ionic.Platform.isAndroid()
         User.register 'android'
     else
-      # デバイス情報登録
-      if ionic.Platform.isIOS()
-        $rootScope.registerIOS()
-      else if ionic.Platform.isAndroid()
-        $rootScope.registerAndroid()
+      $rootScope.PushNotificationInit()
 
 
+    # クリップボードの中身を確認して処理するメソッド
     $rootScope.checkClipboardURL = ->
       $cordovaClipboard.paste().then (result) ->
         # GyazzページへのURLかどうかを確認する
@@ -81,6 +83,8 @@ angular.module('gyazzapp.run', [])
           $cordovaClipboard.copy ''
 
 
+    # アプリを立ち上げた時（インメモリのときも含めて）
+    # クリップボードの確認をする
     document.addEventListener 'resume', ->
       $rootScope.checkClipboardURL()
 

@@ -20,9 +20,7 @@ angular.module('gyazzapp.model.user', [])
       localStorage.setItem 'user_id', data._id
       localStorage.setItem 'session_key', data.session_key
 
-      # プッシュ通知設定に飛ばす
-      if platform is 'ios'
-        $rootScope.registerIOS()
-      else if platform is 'android'
-        $rootScope.registerAndroid()
+      # プッシュ通知初期設定をする
+      $rootScope.PushNotificationInit()
+
       data
