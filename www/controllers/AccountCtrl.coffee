@@ -4,7 +4,7 @@ angular.module('gyazzapp.controllers.account', [])
   # 設定データを反映
   unless localStorage.getItem 'setting'
     setting = {
-      all_push: false
+      all_push: true
     }
     localStorage.setItem 'setting', JSON.stringify setting
     $scope.setting = setting

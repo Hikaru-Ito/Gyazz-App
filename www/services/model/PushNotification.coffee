@@ -18,9 +18,17 @@ angular.module('gyazzapp.model.pushnotifications', [])
       else
         channel_data = [channel_id]
 
+      # Parse.comの識別ID
+      parse_obj_id = localStorage.getItem 'parse_obj_id'
+      console.log parse_obj_id
+
+      unless parse_obj_id
+        $cordovaToast.show 'デバイスが登録されていません', 'short', 'center'
+        return false
+
       # サーバーに送信
       $.ajax
-        url: PARSE_API_URL + '/' + localStorage.getItem 'parse_obj_id'
+        url: PARSE_API_URL + '/' + parse_obj_id
         type: 'PUT'
         headers:
           'X-Parse-Application-Id': X_Parse_Application_Id
@@ -33,6 +41,7 @@ angular.module('gyazzapp.model.pushnotifications', [])
         true
       .fail (error) ->
         console.log "プッシュ通知設定変更エラー"
+        console.log JSON.stringify error
         false
 
     # デバイス情報を登録
@@ -46,10 +55,14 @@ angular.module('gyazzapp.model.pushnotifications', [])
 
       # プッシュ通知の設定をチャンネル登録に反映させる
       setting_data = JSON.parse localStorage.getItem 'setting'
-      if setting_data.all_push
-        channel_data = [channel_id, 'ALLRECIEVE']
+
+      if setting_data
+        if setting_data.all_push
+          channel_data = [channel_id, 'ALLRECIEVE']
+        else
+          channel_data = [channel_id]
       else
-        channel_data = [channel_id]
+        channel_data = [channel_id, 'ALLRECIEVE']
 
       # iOS登録
       if platform is 'ios'
@@ -70,6 +83,8 @@ angular.module('gyazzapp.model.pushnotifications', [])
           localStorage.setItem 'parse_obj_id', data.objectId
           true
         .fail (data) ->
+          console.log 'デバイスデータ登録失敗'
+          console.log JSON.stringify data
           false
 
       # Android登録
@@ -94,5 +109,7 @@ angular.module('gyazzapp.model.pushnotifications', [])
           localStorage.setItem 'parse_obj_id', data.objectId
           true
         .fail (data) ->
+          console.log 'デバイスデータ登録失敗'
+          console.log JSON.stringify data
           false
  }

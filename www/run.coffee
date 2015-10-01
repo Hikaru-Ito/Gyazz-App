@@ -43,7 +43,7 @@ angular.module('gyazzapp.run', [])
           PushNotifications.registerDeviceID data.registrationId, 'ios'
         else if ionic.Platform.isAndroid()
           PushNotifications.registerDeviceID data.registrationId, 'android'
-        console.log data.registrationId
+        console.log "デバイストークン: #{data.registrationId}"
 
       # foregroundでPush受信したら、トーストメッセージを出す
       push.on 'notification', (data) ->
@@ -65,6 +65,7 @@ angular.module('gyazzapp.run', [])
         User.register 'android'
     else
       $rootScope.PushNotificationInit()
+
 
 
     # クリップボードの中身を確認して処理するメソッド
@@ -89,8 +90,10 @@ angular.module('gyazzapp.run', [])
       $rootScope.checkClipboardURL()
 
     # ログインを確認する
-    if !localStorage.getItem 'logined'
-      $location.path '/login'
-    else
+    # if !localStorage.getItem 'logined'
+    #   $location.path '/login'
+    # else
       # URLコピーを確認
       $rootScope.checkClipboardURL()
+
+    # alert 'hoghoge'
