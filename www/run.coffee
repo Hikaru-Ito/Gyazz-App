@@ -60,14 +60,13 @@ angular.module('gyazzapp.run', [])
     # ユーザー登録を確認する
     # ユーザー登録していれば、Push通知のデバイストークン初期化
     # ユーザー登録していなければ、User-Factoryに登録を促す
-    if !localStorage.getItem('user_id')
-      if ionic.Platform.isIOS()
-        User.register 'ios'
-      else if ionic.Platform.isAndroid()
-        User.register 'android'
-    else
-      $rootScope.PushNotificationInit()
-
+    # if !localStorage.getItem('user_id')
+    #   if ionic.Platform.isIOS()
+    #     User.register 'ios'
+    #   else if ionic.Platform.isAndroid()
+    #     User.register 'android'
+    # else
+    #   $rootScope.PushNotificationInit()
 
 
     # クリップボードの中身を確認して処理するメソッド
@@ -91,12 +90,22 @@ angular.module('gyazzapp.run', [])
     document.addEventListener 'resume', ->
       $rootScope.checkClipboardURL()
 
+
     # ログインを確認する
+    # ログインしていなければ、ログインページに飛ばす
+    # ログイン成功後、ユーザー登録をする
+    # すでにログインしていれば、デバイストークン更新をする
     if !localStorage.getItem 'logined'
+
       $ionicHistory.clearHistory()
       # $location.path '/login'
       $state.go 'login'
       console.log 'スタックを削除しました'
+
     else
-      # URLコピーを確認
+
+      # デバイストークン更新
+      $rootScope.PushNotificationInit()
+
+      # クリップボードのURLを確認する
       $rootScope.checkClipboardURL()
