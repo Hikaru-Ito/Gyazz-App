@@ -38,5 +38,5 @@ angular.module('gyazzapp.controllers.account', [])
 
   # テスト用のログアウトメソッド
   $scope.logout = ->
-    localStorage.removeItem 'logined'
-    alert 'ログアウトしました'
+    localStorage.clear()
+    alert 'localStorageを全消去しました'

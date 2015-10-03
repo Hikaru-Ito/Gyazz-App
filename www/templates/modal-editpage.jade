@@ -1,10 +1,7 @@
-ion-modal-view
-
-  ion-header-bar.bar-stable
-    h1.title Gyazz for Masuilab
+ion-view(view-title='ログイン')
 
   ion-content.padding
-
+  
     .errorMessage(ng-show='errorMessage') ログインに失敗しました
 
     form(name='signinForm', novalidate='', ng-submit='signIn(user)')

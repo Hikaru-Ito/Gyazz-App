@@ -24,6 +24,7 @@ angular.module 'gyazzapp', [
   'gyazzapp.model.stars'
   'gyazzapp.model.todos'
   'ngCordova'
+  'ngIOS9UIWebViewPatch' # iOS9UIWeb
 ]
 .config ($stateProvider, $urlRouterProvider) ->
 

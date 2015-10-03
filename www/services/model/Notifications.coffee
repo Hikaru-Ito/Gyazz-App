@@ -9,4 +9,6 @@ angular.module('gyazzapp.model.notifications', [])
         url: GYAZZ_APP_BACKEND_URL + '/notifications'
       .then (data) ->
         return data
+      .fail (error) ->
+        console.log JSON.stringify error
  }

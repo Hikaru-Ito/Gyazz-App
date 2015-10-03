@@ -1,22 +1,17 @@
 angular.module('gyazzapp.controllers.login', [])
-.controller 'LoginCtrl', ($scope, $ionicModal, $location) ->
+.controller 'LoginCtrl', ($scope, $ionicModal, $location, $state, $ionicHistory) ->
 
   $scope.errorMessage = false
-
-  # モーダル定義
-  $ionicModal.fromTemplateUrl('templates/modal-editpage.html',
-    scope: $scope
-    animation: 'slide-in-up').then (modal) ->
-    $scope.modal = modal
-    $scope.modal.show()
 
   # ログイン処理
   $scope.signIn = (user) ->
     # バリデーションをする
     # この実装はまずいのであとで変更
     if user.username is 'pitecan' and user.pass is 'masu1lab'
-      $location.path '/tab/pagelist'
+      $ionicHistory.clearHistory()
+      $state.go 'tab.pagelist'
       localStorage.setItem 'logined', 'logined'
-      $scope.modal.hide()
+      console.log 'ログイン成功'
     else
       $scope.errorMessage = true
+      console.log 'ログイン失敗'

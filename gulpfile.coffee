@@ -22,7 +22,10 @@ notifier = require 'node-notifier'
 ###
 paths =
   sass: './www/**/*.scss'
-  coffee: './www/**/*.coffee'
+  coffee:[
+    './www/**/*.coffee'
+    '!./www/lib/**/*.coffee'
+  ]
   jade: './www/**/*.jade'
 
 

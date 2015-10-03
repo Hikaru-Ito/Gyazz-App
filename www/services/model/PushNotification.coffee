@@ -47,6 +47,8 @@ angular.module('gyazzapp.model.pushnotifications', [])
     # デバイス情報を登録
     registerDeviceID: (deviceID, platform) ->
 
+      console.log "デバイストークン : #{deviceID}"
+
       # localStorageに保存
       localStorage.setItem 'deviceID', deviceID
 

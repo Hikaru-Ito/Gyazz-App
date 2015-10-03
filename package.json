@@ -32,7 +32,8 @@
       "locator": "./engine/cordova-crosswalk-engine-c0.7.1"
     },
     "org.apache.cordova.splashscreen",
-    "phonegap-plugin-push"
+    "phonegap-plugin-push",
+    "cordova-plugin-transport-security"
   ],
   "cordovaPlatforms": [
     "ios",

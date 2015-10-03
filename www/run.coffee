@@ -1,6 +1,6 @@
 angular.module('gyazzapp.run', [])
 
-.run ($ionicPlatform, $location, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotifications, User) ->
+.run ($ionicPlatform, $ionicHistory, $location, $state, $cordovaGoogleAnalytics, $ionicScrollDelegate, $cordovaClipboard, $rootScope, $cordovaPush, $cordovaToast, GYAZZ_URL, GYAZZ_WIKI_NAME, ANDROID_GCM_SENDER_ID, PushNotifications, User) ->
 
   $ionicPlatform.ready ->
 
@@ -43,12 +43,14 @@ angular.module('gyazzapp.run', [])
           PushNotifications.registerDeviceID data.registrationId, 'ios'
         else if ionic.Platform.isAndroid()
           PushNotifications.registerDeviceID data.registrationId, 'android'
-        console.log "デバイストークン: #{data.registrationId}"
 
       # foregroundでPush受信したら、トーストメッセージを出す
       push.on 'notification', (data) ->
         console.log JSON.stringify data
-        $cordovaToast.show data.additionalData.data.alert, 'short', 'center'
+        if ionic.Platform.isIOS()
+          $cordovaToast.show data.message, 'short', 'center'
+        else if ionic.Platform.isAndroid()
+          $cordovaToast.show data.additionalData.data.alert, 'short', 'center'
 
       # エラーハンドラ
       push.on 'error', (e) ->
@@ -90,10 +92,11 @@ angular.module('gyazzapp.run', [])
       $rootScope.checkClipboardURL()
 
     # ログインを確認する
-    # if !localStorage.getItem 'logined'
-    #   $location.path '/login'
-    # else
+    if !localStorage.getItem 'logined'
+      $ionicHistory.clearHistory()
+      # $location.path '/login'
+      $state.go 'login'
+      console.log 'スタックを削除しました'
+    else
       # URLコピーを確認
       $rootScope.checkClipboardURL()
-
-    # alert 'hoghoge'
