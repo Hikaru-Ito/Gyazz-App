@@ -16,23 +16,23 @@ angular.module('gyazzapp.controllers.login', [])
       timeout: 10000
     .done (data) ->
 
-      # Stateをリフレッシュして、AndroidBackできなくする
-      # $ionicHistory.clearHistory()
+      goTopPage = ->
 
-      # トップページに遷移
-      $state.go 'tab.pagelist'
+        # トップページに遷移
+        $state.go 'tab.pagelist'
 
-      ログイン状態を保持する
-      localStorage.setItem 'logined', 'logined'
+        # ログイン状態を保持する
+        localStorage.setItem 'logined', 'logined'
 
       # ユーザー登録
       if ionic.Platform.isIOS()
-        User.register 'ios'
+        User.register('ios').then ->
+          goTopPage()
+          $ionicLoading.hide()
       else if ionic.Platform.isAndroid()
-        User.register 'android'
-
-      console.log 'ログイン成功'
-      $ionicLoading.hide()
+        User.register('android').then ->
+          goTopPage()
+          $ionicLoading.hide()
 
     .fail (error) ->
 
