@@ -10,7 +10,7 @@ angular.module('gyazzapp.controllers.login', [])
     # ログイン認証
     $ionicLoading.show()
     $.ajax
-      url:"http://gyazz.masuilab.org/増井研"
+      url: 'http://gyazz.masuilab.org/増井研'
       username: user.username,
       password: user.pass,
       timeout: 10000

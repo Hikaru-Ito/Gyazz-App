@@ -96,11 +96,7 @@ angular.module('gyazzapp.run', [])
     # ログイン成功後、ユーザー登録をする
     # すでにログインしていれば、デバイストークン更新をする
     if !localStorage.getItem 'logined'
-
-      $ionicHistory.clearHistory()
-      # $location.path '/login'
       $state.go 'login'
-      console.log 'スタックを削除しました'
 
     else
 

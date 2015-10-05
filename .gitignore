@@ -9,3 +9,4 @@ www/**/*.html
 www/js/
 www/css/
 npm-debug.log
+zipalign
